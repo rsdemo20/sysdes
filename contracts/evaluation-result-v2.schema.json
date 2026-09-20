@@ -1,0 +1,595 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sysdes.invalid/contracts/evaluation-result-v2.schema.json",
+  "title": "evaluation-result-v2",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "evaluated",
+            "insufficient_data"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6000
+        },
+        "acceptanceCoverage": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "criterionId",
+              "assessment",
+              "explanation",
+              "evidenceRefs"
+            ],
+            "properties": {
+              "criterionId": {
+                "$ref": "#/$defs/id"
+              },
+              "assessment": {
+                "type": "string",
+                "enum": [
+                  "supported_by_design",
+                  "at_risk",
+                  "not_addressed",
+                  "cannot_assess",
+                  "not_applicable_to_scope"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/refs"
+              }
+            }
+          }
+        },
+        "findings": {
+          "type": "array",
+          "maxItems": 30,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "severity",
+              "objectRefs",
+              "requirementRefs",
+              "acceptanceCriterionRefs",
+              "score",
+              "explanation",
+              "recommendation"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "info",
+                  "minor",
+                  "major",
+                  "critical"
+                ]
+              },
+              "objectRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "requirementRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "acceptanceCriterionRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "score": {
+                "$ref": "#/$defs/score"
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 3000
+              },
+              "recommendation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 3000
+              }
+            }
+          }
+        },
+        "questions": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "schemaVersion": {
+          "const": 2
+        },
+        "evaluationType": {
+          "const": "solution"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "criterionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+              },
+              "levelId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                },
+                "minItems": 0,
+                "maxItems": 50,
+                "uniqueItems": true
+              },
+              "maxPoints": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "awardedPoints": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "criterionId",
+              "levelId",
+              "explanation",
+              "evidenceRefs",
+              "maxPoints",
+              "awardedPoints"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 200
+        },
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "sourceRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reportLocale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "semanticContentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evaluationInputHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "rubricVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "rawScore": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hldScore": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "additionalScore": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "referenceScore": {
+          "const": 1500
+        },
+        "progressPercent": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "maximumReached": {
+          "type": "boolean"
+        },
+        "hintsUsed": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Present only when hints were taken before the run was accepted."
+        },
+        "hintPenaltyPercent": {
+          "type": "integer",
+          "minimum": 5,
+          "description": "Percentage points taken off progressPercent: five per hint."
+        },
+        "progressBeforeHintsPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "progressPercent before the hint charge, so the arithmetic can be shown."
+        }
+      },
+      "required": [
+        "status",
+        "summary",
+        "acceptanceCoverage",
+        "findings",
+        "questions",
+        "assumptions",
+        "schemaVersion",
+        "evaluationType",
+        "items",
+        "evaluationId",
+        "sourceRevision",
+        "reportLocale",
+        "createdAt",
+        "semanticContentHash",
+        "evaluationInputHash",
+        "rubricVersion",
+        "rawScore",
+        "hldScore",
+        "additionalScore",
+        "referenceScore",
+        "progressPercent",
+        "maximumReached"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "evaluated",
+            "insufficient_data"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6000
+        },
+        "acceptanceCoverage": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "criterionId",
+              "assessment",
+              "explanation",
+              "evidenceRefs"
+            ],
+            "properties": {
+              "criterionId": {
+                "$ref": "#/$defs/id"
+              },
+              "assessment": {
+                "type": "string",
+                "enum": [
+                  "supported_by_design",
+                  "at_risk",
+                  "not_addressed",
+                  "cannot_assess",
+                  "not_applicable_to_scope"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/refs"
+              }
+            }
+          }
+        },
+        "findings": {
+          "type": "array",
+          "maxItems": 30,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "severity",
+              "objectRefs",
+              "requirementRefs",
+              "acceptanceCriterionRefs",
+              "score",
+              "explanation",
+              "recommendation"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "info",
+                  "minor",
+                  "major",
+                  "critical"
+                ]
+              },
+              "objectRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "requirementRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "acceptanceCriterionRefs": {
+                "$ref": "#/$defs/refs"
+              },
+              "score": {
+                "$ref": "#/$defs/score"
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 3000
+              },
+              "recommendation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 3000
+              }
+            }
+          }
+        },
+        "questions": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "schemaVersion": {
+          "const": 2
+        },
+        "evaluationType": {
+          "enum": [
+            "hld",
+            "er",
+            "sequence"
+          ]
+        },
+        "overallScore": {
+          "$ref": "#/$defs/score"
+        },
+        "criteria": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "score",
+              "assessment",
+              "evidenceRefs"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "score": {
+                "$ref": "#/$defs/score"
+              },
+              "assessment": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/refs"
+              }
+            }
+          }
+        },
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "sourceRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reportLocale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "semanticContentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evaluationInputHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "rubricVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        }
+      },
+      "required": [
+        "status",
+        "summary",
+        "acceptanceCoverage",
+        "findings",
+        "questions",
+        "assumptions",
+        "schemaVersion",
+        "evaluationType",
+        "overallScore",
+        "criteria",
+        "evaluationId",
+        "sourceRevision",
+        "reportLocale",
+        "createdAt",
+        "semanticContentHash",
+        "evaluationInputHash",
+        "rubricVersion"
+      ]
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "refs": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "score": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 5
+    }
+  }
+}

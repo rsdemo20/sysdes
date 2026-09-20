@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 2,
+  "status": "evaluated",
+  "summary": "Иллюстрация формата и арифметики; не экспертная оценка шаблона.",
+  "acceptanceCoverage": [
+    {
+      "criterionId": "accept-no-duplicate-order",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    },
+    {
+      "criterionId": "accept-payment-status",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    }
+  ],
+  "findings": [],
+  "questions": [],
+  "assumptions": [],
+  "evaluationType": "hld",
+  "overallScore": 3,
+  "criteria": [
+    {
+      "id": "responsibilities",
+      "label": "Ответственности",
+      "score": 3,
+      "assessment": "Иллюстрация диагностической шкалы.",
+      "evidenceRefs": [
+        "hld-orders"
+      ]
+    }
+  ]
+}

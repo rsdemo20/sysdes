@@ -1,0 +1,446 @@
+{
+  "inputSchemaVersion": 1,
+  "exportVersion": 1,
+  "evaluationType": "hld",
+  "diagramIds": [
+    "diagram-hld"
+  ],
+  "semanticExport": {
+    "exportVersion": 1,
+    "evaluationType": "hld",
+    "diagramIds": [
+      "diagram-hld"
+    ],
+    "domainId": "ecommerce",
+    "templateProvenance": {
+      "templateId": "order-payment",
+      "templateVersion": 1,
+      "templateLocale": "ru",
+      "rubricVersion": "order-payment:1"
+    },
+    "context": {
+      "requirements": [
+        {
+          "id": "req-payment",
+          "kind": "functional",
+          "text": "После подтверждения оплаты обновить состояние существующего заказа и сохранить связь с платёжным событием.",
+          "priority": "must",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-req-payment"
+        }
+      ],
+      "acceptanceCriteria": [
+        {
+          "id": "accept-no-duplicate-order",
+          "text": "Повтор одного уведомления об оплате не создаёт второй оплаченный заказ.",
+          "requirementRefs": [
+            "req-payment"
+          ],
+          "priority": "must",
+          "condition": {
+            "kind": "scenario",
+            "given": "Существует заказ и успешно обработанное уведомление с paymentEventId.",
+            "when": "То же уведомление приходит повторно.",
+            "then": "Состояние оплаты остаётся прежним, второй заказ и повторный эффект оплаты не создаются."
+          },
+          "verificationMethod": "Интеграционный тест с повторной и конкурентной доставкой одного paymentEventId.",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-accept-no-duplicate-order"
+        },
+        {
+          "id": "accept-payment-status",
+          "text": "Не менее 99% принятых уведомлений обновляют статус заказа за 30 секунд в согласованных условиях приёмки.",
+          "requirementRefs": [
+            "req-payment"
+          ],
+          "priority": "must",
+          "condition": {
+            "kind": "numeric",
+            "metricName": "Доля уведомлений с обновлением статуса заказа за 30 секунд",
+            "comparator": "ge",
+            "value": 99,
+            "upperValue": null,
+            "unit": "%",
+            "measurementWindow": "Приёмочный прогон длительностью 1 час",
+            "population": "Все валидные уведомления, принятые HTTP endpoint в этом прогоне"
+          },
+          "verificationMethod": "Сопоставить время приёма события и перехода заказа в оплаченный статус; профиль нагрузки требуется уточнить.",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-accept-payment-status"
+        }
+      ],
+      "technicalParameters": [],
+      "assumptions": [
+        {
+          "id": "assumption-delivery",
+          "text": "Платёжный провайдер может доставлять одно уведомление повторно.",
+          "diagramIds": []
+        }
+      ],
+      "constraints": []
+    },
+    "diagrams": [
+      {
+        "id": "diagram-hld",
+        "type": "hld",
+        "title": "Обработка оплаты",
+        "nodes": [
+          {
+            "id": "hld-orders",
+            "kind": "service",
+            "label": "Orders",
+            "properties": {
+              "responsibility": "Принимать уведомления и обновлять состояние заказов",
+              "technology": null
+            },
+            "originTemplateObjectId": "tpl-hld-orders"
+          },
+          {
+            "id": "hld-payment",
+            "kind": "external_system",
+            "label": "Payment provider",
+            "properties": {
+              "responsibility": "Подтверждать оплату",
+              "technology": null
+            },
+            "originTemplateObjectId": "tpl-hld-payment"
+          },
+          {
+            "id": "hld-store",
+            "kind": "datastore",
+            "label": "Orders DB",
+            "properties": {
+              "storageRole": "primary",
+              "technology": "PostgreSQL"
+            },
+            "originTemplateObjectId": "tpl-hld-store"
+          }
+        ],
+        "edges": [
+          {
+            "id": "hld-webhook",
+            "sourceId": "hld-payment",
+            "targetId": "hld-orders",
+            "label": "Уведомление об оплате",
+            "interaction": "async",
+            "protocol": "HTTPS webhook",
+            "originTemplateObjectId": "tpl-hld-webhook"
+          },
+          {
+            "id": "hld-write",
+            "sourceId": "hld-orders",
+            "targetId": "hld-store",
+            "label": "Обновить заказ",
+            "interaction": "sync",
+            "protocol": "SQL",
+            "originTemplateObjectId": "tpl-hld-write"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "id": "annotation-orders",
+        "ownerObjectId": "hld-orders",
+        "text": "Поведение после сбоя требует описания."
+      }
+    ],
+    "notes": [
+      {
+        "id": "note-cache",
+        "text": "Корзину можно кэшировать; TTL и инвалидация пока не описаны.",
+        "diagramIds": [
+          "diagram-hld"
+        ]
+      }
+    ],
+    "rubricVersion": "order-payment:1",
+    "referencedObjects": []
+  },
+  "templateBaseline": {
+    "exportVersion": 1,
+    "evaluationType": "hld",
+    "diagramIds": [
+      "diagram-hld"
+    ],
+    "domainId": "ecommerce",
+    "templateProvenance": {
+      "templateId": "order-payment",
+      "templateVersion": 1,
+      "templateLocale": "ru",
+      "rubricVersion": "order-payment:1"
+    },
+    "context": {
+      "requirements": [
+        {
+          "id": "req-payment",
+          "kind": "functional",
+          "text": "После подтверждения оплаты обновить состояние существующего заказа и сохранить связь с платёжным событием.",
+          "priority": "must",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-req-payment"
+        }
+      ],
+      "acceptanceCriteria": [
+        {
+          "id": "accept-no-duplicate-order",
+          "text": "Повтор одного уведомления об оплате не создаёт второй оплаченный заказ.",
+          "requirementRefs": [
+            "req-payment"
+          ],
+          "priority": "must",
+          "condition": {
+            "kind": "scenario",
+            "given": "Существует заказ и успешно обработанное уведомление с paymentEventId.",
+            "when": "То же уведомление приходит повторно.",
+            "then": "Состояние оплаты остаётся прежним, второй заказ и повторный эффект оплаты не создаются."
+          },
+          "verificationMethod": "Интеграционный тест с повторной и конкурентной доставкой одного paymentEventId.",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-accept-no-duplicate-order"
+        },
+        {
+          "id": "accept-payment-status",
+          "text": "Не менее 99% принятых уведомлений обновляют статус заказа за 30 секунд в согласованных условиях приёмки.",
+          "requirementRefs": [
+            "req-payment"
+          ],
+          "priority": "must",
+          "condition": {
+            "kind": "numeric",
+            "metricName": "Доля уведомлений с обновлением статуса заказа за 30 секунд",
+            "comparator": "ge",
+            "value": 99,
+            "upperValue": null,
+            "unit": "%",
+            "measurementWindow": "Приёмочный прогон длительностью 1 час",
+            "population": "Все валидные уведомления, принятые HTTP endpoint в этом прогоне"
+          },
+          "verificationMethod": "Сопоставить время приёма события и перехода заказа в оплаченный статус; профиль нагрузки требуется уточнить.",
+          "diagramIds": [],
+          "originTemplateObjectId": "tpl-accept-payment-status"
+        }
+      ],
+      "technicalParameters": [],
+      "assumptions": [
+        {
+          "id": "assumption-delivery",
+          "text": "Платёжный провайдер может доставлять одно уведомление повторно.",
+          "diagramIds": []
+        }
+      ],
+      "constraints": []
+    },
+    "diagrams": [
+      {
+        "id": "diagram-hld",
+        "type": "hld",
+        "title": "Обработка оплаты",
+        "nodes": [
+          {
+            "id": "hld-orders",
+            "kind": "service",
+            "label": "Orders",
+            "properties": {
+              "responsibility": "Принимать уведомления и обновлять состояние заказов",
+              "technology": null
+            },
+            "originTemplateObjectId": "tpl-hld-orders"
+          },
+          {
+            "id": "hld-payment",
+            "kind": "external_system",
+            "label": "Payment provider",
+            "properties": {
+              "responsibility": "Подтверждать оплату",
+              "technology": null
+            },
+            "originTemplateObjectId": "tpl-hld-payment"
+          },
+          {
+            "id": "hld-store",
+            "kind": "datastore",
+            "label": "Orders DB",
+            "properties": {
+              "storageRole": "primary",
+              "technology": "PostgreSQL"
+            },
+            "originTemplateObjectId": "tpl-hld-store"
+          }
+        ],
+        "edges": [
+          {
+            "id": "hld-webhook",
+            "sourceId": "hld-payment",
+            "targetId": "hld-orders",
+            "label": "Уведомление об оплате",
+            "interaction": "async",
+            "protocol": "HTTPS webhook",
+            "originTemplateObjectId": "tpl-hld-webhook"
+          },
+          {
+            "id": "hld-write",
+            "sourceId": "hld-orders",
+            "targetId": "hld-store",
+            "label": "Обновить заказ",
+            "interaction": "sync",
+            "protocol": "SQL",
+            "originTemplateObjectId": "tpl-hld-write"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "id": "annotation-orders",
+        "ownerObjectId": "hld-orders",
+        "text": "Поведение после сбоя требует описания."
+      }
+    ],
+    "notes": [],
+    "rubricVersion": "order-payment:1",
+    "referencedObjects": []
+  },
+  "semanticDelta": {
+    "addedIds": [
+      "note-cache"
+    ],
+    "removedIds": [],
+    "changedIds": []
+  },
+  "canvasId": "canvas-example",
+  "documentRevision": 1,
+  "rubric": {
+    "schemaVersion": 1,
+    "rubricId": "order-payment",
+    "version": 1,
+    "domainId": "ecommerce",
+    "templateVersionRef": {
+      "templateId": "order-payment",
+      "templateVersion": 1
+    },
+    "referenceScore": 1500,
+    "items": [
+      {
+        "id": "core",
+        "part": "hld",
+        "maxPoints": 1200,
+        "exclusiveGroup": null,
+        "description": {
+          "ru": "core",
+          "en": "core"
+        },
+        "alternatives": [],
+        "levels": [
+          {
+            "id": "absent",
+            "points": 0,
+            "description": {
+              "ru": "absent",
+              "en": "absent"
+            }
+          },
+          {
+            "id": "partial",
+            "points": 1050,
+            "description": {
+              "ru": "partial",
+              "en": "partial"
+            }
+          },
+          {
+            "id": "full",
+            "points": 1200,
+            "description": {
+              "ru": "full",
+              "en": "full"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cache",
+        "part": "hld",
+        "maxPoints": 120,
+        "exclusiveGroup": null,
+        "description": {
+          "ru": "cache",
+          "en": "cache"
+        },
+        "alternatives": [],
+        "levels": [
+          {
+            "id": "absent",
+            "points": 0,
+            "description": {
+              "ru": "absent",
+              "en": "absent"
+            }
+          },
+          {
+            "id": "text",
+            "points": 45,
+            "description": {
+              "ru": "text",
+              "en": "text"
+            }
+          },
+          {
+            "id": "full",
+            "points": 120,
+            "description": {
+              "ru": "full",
+              "en": "full"
+            }
+          }
+        ]
+      },
+      {
+        "id": "idempotency",
+        "part": "additional",
+        "maxPoints": 450,
+        "exclusiveGroup": null,
+        "description": {
+          "ru": "idempotency",
+          "en": "idempotency"
+        },
+        "alternatives": [],
+        "levels": [
+          {
+            "id": "absent",
+            "points": 0,
+            "description": {
+              "ru": "absent",
+              "en": "absent"
+            }
+          },
+          {
+            "id": "full",
+            "points": 450,
+            "description": {
+              "ru": "full",
+              "en": "full"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "semanticContentHash": "b879b7c6de83ccf6b74039f1a0bbeebb4cb69df0db11aeb7cde3c4ccbab71cd8",
+  "promptVersion": "solution-v1",
+  "rubricVersion": "order-payment:1",
+  "modelId": "owner-configured-model",
+  "modelParameters": {
+    "temperature": 0,
+    "maxOutputTokens": 3000
+  },
+  "providerPolicy": {
+    "requireParameters": true,
+    "allowFallbacks": false,
+    "allowedProviders": []
+  },
+  "reportLocale": "ru",
+  "evaluationInputHash": "478a3c578eb54588694eb13512e0b3f21366abbfc9e5129b0c87ea8382a38dda",
+  "createdAt": "2026-09-05T12:00:00Z",
+  "deadlineAt": "2026-09-05T12:01:00Z"
+}

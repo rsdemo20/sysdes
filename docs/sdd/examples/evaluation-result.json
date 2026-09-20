@@ -1,0 +1,42 @@
+{
+  "status": "evaluated",
+  "overallScore": 3,
+  "summary": "В HLD выделена обработка заказа и уведомления об оплате. Для минимальной приёмки нужно описать защиту от повторного уведомления и механизм контроля задержки обновления статуса. Схема сама по себе не подтверждает достижение бизнес-метрик.",
+  "criteria": [
+    {
+      "id": "rubric-hld-business-coverage",
+      "label": "Поддержка бизнес-критериев",
+      "score": 3,
+      "assessment": "Основные участники есть, но защита от повторной обработки не описана на выбранной HLD.",
+      "evidenceRefs": ["hld-orders", "hld-payment", "hld-webhook", "req-payment"]
+    }
+  ],
+  "acceptanceCoverage": [
+    {
+      "criterionId": "accept-no-duplicate-order",
+      "assessment": "at_risk",
+      "explanation": "Повтор webhook возможен согласно условию задачи. HLD не указывает хранение идентификатора события и атомарную защиту повторной обработки; это пробел описания, а не доказательство ошибки будущего кода.",
+      "evidenceRefs": ["hld-webhook", "hld-orders", "assumption-delivery"]
+    },
+    {
+      "criterionId": "accept-payment-status",
+      "assessment": "cannot_assess",
+      "explanation": "Для подтверждения доли своевременно обновлённых заказов нужны условия нагрузки, измерение времени и поведение при недоступности обработчика. Эти сведения отсутствуют в выбранной HLD.",
+      "evidenceRefs": ["hld-orders", "hld-webhook"]
+    }
+  ],
+  "findings": [
+    {
+      "id": "finding-duplicate-webhook",
+      "severity": "major",
+      "objectRefs": ["hld-orders", "hld-webhook"],
+      "requirementRefs": ["req-payment"],
+      "acceptanceCriterionRefs": ["accept-no-duplicate-order"],
+      "score": 2,
+      "explanation": "В выбранной схеме не описана дедупликация уведомления. Из-за этого нельзя обосновать критерий отсутствия второго оплаченного заказа при повторе события.",
+      "recommendation": "Указать владельца хранения обработанных paymentEventId и атомарную связь записи события с изменением существующего заказа; описать повтор в Sequence."
+    }
+  ],
+  "questions": ["Какой механизм обеспечивает восстановление необработанных уведомлений после сбоя?"],
+  "assumptions": ["Оценка относится только к выбранной HLD; другие диаграммы автоматически не считаются доказательством."]
+}

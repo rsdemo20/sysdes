@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sysdes.invalid/contracts/canvas-export.schema.json",
+  "title": "canvas-export",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "exportSchemaVersion": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "domainId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "templateProvenance": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "templateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            "templateVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "templateLocale": {
+              "enum": [
+                "ru",
+                "en"
+              ]
+            },
+            "rubricVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            }
+          },
+          "required": [
+            "templateId",
+            "templateVersion",
+            "templateLocale",
+            "rubricVersion"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "document": {
+      "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+    }
+  },
+  "required": [
+    "exportSchemaVersion",
+    "name",
+    "domainId",
+    "templateProvenance",
+    "document"
+  ]
+}

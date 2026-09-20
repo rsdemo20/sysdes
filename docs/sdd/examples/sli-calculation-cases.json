@@ -1,0 +1,45 @@
+{
+  "metricDefinitionVersion": 1,
+  "scope": "Примеры арифметики и граничных условий. thresholdSatisfied не означает, что выполнены требования к выборке, coverage и сопоставимости метода измерения.",
+  "ratioCases": [
+    {"id":"smooth-94-is-not-above-94","metric":"TECH-01","good":94,"bad":6,"unknown":0,"target":0.94,"operator":"gt","expectedObserved":0.94,"expectedLowerBound":0.94,"thresholdSatisfied":false},
+    {"id":"smooth-95-passes","metric":"TECH-01","good":95,"bad":5,"unknown":0,"target":0.94,"operator":"gt","expectedObserved":0.95,"expectedLowerBound":0.95,"thresholdSatisfied":true},
+    {"id":"missing-cannot-improve-status","metric":"TECH-01","good":90,"bad":5,"unknown":5,"target":0.94,"operator":"gt","expectedObserved":0.9473684210526315,"expectedLowerBound":0.9,"thresholdSatisfied":false},
+    {"id":"action-99-is-inclusive","metric":"TECH-02","good":99,"bad":1,"unknown":0,"target":0.99,"operator":"ge","expectedObserved":0.99,"expectedLowerBound":0.99,"thresholdSatisfied":true},
+    {"id":"load-95-is-inclusive","metric":"TECH-03","good":95,"bad":5,"unknown":0,"target":0.95,"operator":"ge","expectedObserved":0.95,"expectedLowerBound":0.95,"thresholdSatisfied":true},
+    {"id":"nine-undos","metric":"UX-01","good":91,"bad":9,"unknown":0,"target":0.9,"operator":"gt","expectedObserved":0.91,"expectedLowerBound":0.91,"thresholdSatisfied":true},
+    {"id":"ten-undos","metric":"UX-01","good":90,"bad":10,"unknown":0,"target":0.9,"operator":"gt","expectedObserved":0.9,"expectedLowerBound":0.9,"thresholdSatisfied":false},
+    {"id":"connect-87-is-not-above-87","metric":"UX-04","good":87,"bad":13,"unknown":0,"target":0.87,"operator":"gt","expectedObserved":0.87,"expectedLowerBound":0.87,"thresholdSatisfied":false},
+    {"id":"connect-88-passes","metric":"UX-04","good":88,"bad":12,"unknown":0,"target":0.87,"operator":"gt","expectedObserved":0.88,"expectedLowerBound":0.88,"thresholdSatisfied":true},
+    {"id":"no-eligible-events","metric":"TECH-02","good":0,"bad":0,"unknown":0,"target":0.99,"operator":"ge","expectedObserved":null,"expectedLowerBound":null,"thresholdSatisfied":null}
+  ],
+  "durationBoundaryCases": [
+    {"metric":"TECH-02","valueMs":99.9,"thresholdMs":100,"operator":"lt","expectedGood":true},
+    {"metric":"TECH-02","valueMs":100,"thresholdMs":100,"operator":"lt","expectedGood":false},
+    {"metric":"TECH-03","valueMs":2999,"thresholdMs":3000,"operator":"lt","expectedGood":true},
+    {"metric":"TECH-03","valueMs":3000,"thresholdMs":3000,"operator":"lt","expectedGood":false},
+    {"metric":"UX-01-micro-undo","valueMs":5000,"thresholdMs":5000,"operator":"le","expectedGood":true},
+    {"metric":"UX-01-micro-undo","valueMs":5000.1,"thresholdMs":5000,"operator":"le","expectedGood":false}
+  ],
+  "frameWindowCases": [
+    {"callbacksInOneSecond":60,"rawBelow60":false,"budgetSlowWithOneCallbackTolerance":false},
+    {"callbacksInOneSecond":59,"rawBelow60":true,"budgetSlowWithOneCallbackTolerance":false},
+    {"callbacksInOneSecond":58,"rawBelow60":true,"budgetSlowWithOneCallbackTolerance":true},
+    {"callbacksInOneSecond":0,"rawBelow60":true,"budgetSlowWithOneCallbackTolerance":true}
+  ],
+  "dragCases": [
+    {"durationsSeconds":[2,8,12],"activeSessionSeconds":120,"expectedExcessSeconds":10,"expectedDragShare":0.45454545454545453,"expectedSessionShare":0.08333333333333333},
+    {"durationsSeconds":[],"activeSessionSeconds":120,"expectedExcessSeconds":0,"expectedDragShare":null,"expectedSessionShare":0},
+    {"durationsSeconds":[40],"activeSessionSeconds":40,"expectedExcessSeconds":35,"expectedDragShare":0.875,"expectedSessionShare":0.875}
+  ],
+  "clickCase": {
+    "patternId":"P1","inputMode":"mouse","baselineClicks":3,
+    "successfulAttemptClicks":[3,3,6],"abandonedAttemptClicks":[2],
+    "expectedMeanSuccessfulClicks":4,"expectedMeanExcessSuccessfulClicks":1,
+    "expectedAllAttemptCount":4,"expectedCompletionShare":0.75
+  },
+  "connectionIntentCase": {
+    "intentId":"intent-example-1","gestureOutcomes":["miss_target","success"],
+    "expectedGestureSuccess":0.5,"expectedFirstAttemptIntentSuccess":0,"expectedEventualCompletion":1
+  }
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "input": {
+      "z": 1e+30,
+      "small": 1e-27,
+      "negativeZero": -0.0,
+      "a": 4.5
+    },
+    "expected": "{\"a\":4.5,\"negativeZero\":0,\"small\":1e-27,\"z\":1e+30}"
+  },
+  {
+    "input": {
+      "": "private",
+      "😀": "emoji",
+      "a": "x\ny"
+    },
+    "expected": "{\"a\":\"x\\ny\",\"😀\":\"emoji\",\"\":\"private\"}"
+  },
+  {
+    "input": {
+      "text": "é != é",
+      "ordered": [
+        3,
+        1,
+        2
+      ],
+      "null": null
+    },
+    "expected": "{\"null\":null,\"ordered\":[3,1,2],\"text\":\"é != é\"}"
+  }
+]

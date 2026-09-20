@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "rubricId": "order-payment",
+  "version": 1,
+  "domainId": "ecommerce",
+  "templateVersionRef": {
+    "templateId": "order-payment",
+    "templateVersion": 1
+  },
+  "referenceScore": 1500,
+  "items": [
+    {
+      "id": "core",
+      "part": "hld",
+      "maxPoints": 1200,
+      "exclusiveGroup": null,
+      "description": {
+        "ru": "core",
+        "en": "core"
+      },
+      "alternatives": [],
+      "levels": [
+        {
+          "id": "absent",
+          "points": 0,
+          "description": {
+            "ru": "absent",
+            "en": "absent"
+          }
+        },
+        {
+          "id": "partial",
+          "points": 1050,
+          "description": {
+            "ru": "partial",
+            "en": "partial"
+          }
+        },
+        {
+          "id": "full",
+          "points": 1200,
+          "description": {
+            "ru": "full",
+            "en": "full"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "part": "hld",
+      "maxPoints": 120,
+      "exclusiveGroup": null,
+      "description": {
+        "ru": "cache",
+        "en": "cache"
+      },
+      "alternatives": [],
+      "levels": [
+        {
+          "id": "absent",
+          "points": 0,
+          "description": {
+            "ru": "absent",
+            "en": "absent"
+          }
+        },
+        {
+          "id": "text",
+          "points": 45,
+          "description": {
+            "ru": "text",
+            "en": "text"
+          }
+        },
+        {
+          "id": "full",
+          "points": 120,
+          "description": {
+            "ru": "full",
+            "en": "full"
+          }
+        }
+      ]
+    },
+    {
+      "id": "idempotency",
+      "part": "additional",
+      "maxPoints": 450,
+      "exclusiveGroup": null,
+      "description": {
+        "ru": "idempotency",
+        "en": "idempotency"
+      },
+      "alternatives": [],
+      "levels": [
+        {
+          "id": "absent",
+          "points": 0,
+          "description": {
+            "ru": "absent",
+            "en": "absent"
+          }
+        },
+        {
+          "id": "full",
+          "points": 450,
+          "description": {
+            "ru": "full",
+            "en": "full"
+          }
+        }
+      ]
+    }
+  ]
+}

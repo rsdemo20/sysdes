@@ -1,0 +1,209 @@
+[
+  {
+    "file": "canvas-document.json",
+    "schema": "canvas-document",
+    "valid": true
+  },
+  {
+    "file": "semantic-export.json",
+    "schema": "semantic-export",
+    "valid": true
+  },
+  {
+    "file": "canvas-export.json",
+    "schema": "canvas-export",
+    "valid": true
+  },
+  {
+    "file": "rubric.json",
+    "schema": "rubric",
+    "valid": true
+  },
+  {
+    "file": "evaluation-input.json",
+    "schema": "evaluation-input",
+    "valid": true
+  },
+  {
+    "file": "provider-solution.json",
+    "schema": "provider-result",
+    "valid": true
+  },
+  {
+    "file": "provider-diagnostic.json",
+    "schema": "provider-result",
+    "valid": true
+  },
+  {
+    "file": "provider-insufficient.json",
+    "schema": "provider-result",
+    "valid": true
+  },
+  {
+    "file": "solution-result.json",
+    "schema": "evaluation-result-v2",
+    "valid": true
+  },
+  {
+    "file": "diagnostic-result-v2.json",
+    "schema": "evaluation-result-v2",
+    "valid": true
+  },
+  {
+    "file": "insufficient-result.json",
+    "schema": "evaluation-result-v2",
+    "valid": true
+  },
+  {
+    "file": "negative/unknown-property.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "negative/invalid-kind.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "negative/duplicate-id.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/dangling-edge.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/bad-return.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "negative/reverse-return.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/unknown-evidence.json",
+    "schema": "provider-result",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/invented-level.json",
+    "schema": "provider-result",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/duplicate-credit.json",
+    "schema": "provider-result",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/wrong-score.json",
+    "schema": "evaluation-result-v2",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/percent-over-100.json",
+    "schema": "evaluation-result-v2",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "negative/wrong-hash.json",
+    "schema": "evaluation-input",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/rubric-overweight.json",
+    "schema": "rubric",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "diagnostic-input.json",
+    "schema": "evaluation-input",
+    "valid": true
+  },
+  {
+    "file": "api-create.json",
+    "schema": "api-models",
+    "definition": "CreateSolution",
+    "valid": true
+  },
+  {
+    "file": "api-evaluate-solution.json",
+    "schema": "api-models",
+    "definition": "StartEvaluation",
+    "valid": true
+  },
+  {
+    "file": "api-evaluate-er.json",
+    "schema": "api-models",
+    "definition": "StartEvaluation",
+    "valid": true
+  },
+  {
+    "file": "api-extra-model.json",
+    "schema": "api-models",
+    "definition": "StartEvaluation",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "api-empty-scope.json",
+    "schema": "api-models",
+    "definition": "StartEvaluation",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "api-solution-filter.json",
+    "schema": "api-models",
+    "definition": "StartEvaluation",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "api-unsupported-locale.json",
+    "schema": "api-models",
+    "definition": "CreateSolution",
+    "valid": false,
+    "stage": "schema"
+  },
+  {
+    "file": "evaluation-result.json",
+    "schema": "evaluation-result",
+    "valid": true
+  },
+  {
+    "file": "negative/wrong-layout-type.json",
+    "schema": "canvas-document",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/wrong-reference-type.json",
+    "schema": "provider-result",
+    "valid": false,
+    "stage": "semantic"
+  },
+  {
+    "file": "negative/wrong-rubric-domain.json",
+    "schema": "evaluation-input",
+    "valid": false,
+    "stage": "semantic"
+  }
+]

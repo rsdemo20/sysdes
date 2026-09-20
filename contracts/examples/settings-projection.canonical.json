@@ -1,0 +1,1 @@
+{"modelId":"owner-configured-model","modelParameters":{"maxOutputTokens":3000,"temperature":0},"promptVersion":"solution-v1","providerPolicy":{"allowFallbacks":false,"allowedProviders":[],"requireParameters":true},"reportLocale":"ru","rubricVersion":"order-payment:1","semanticContentHash":"23363cff0f05d94d5d190a220e7609af1082055b3426679f1f0cd8379fa160dc"}

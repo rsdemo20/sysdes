@@ -1,0 +1,2311 @@
+:root {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #293851;
+  background: #f7f9fd;
+  font-size: 14px;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #7998df;
+  outline-offset: 2px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.app-shell {
+  height: 100dvh;
+  min-height: 660px;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  height: 72px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  background: white;
+  border-bottom: 1px solid #e3e9f3;
+  gap: 22px;
+}
+.brand {
+  font-size: 27px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-symbol {
+  display: grid;
+  place-items: center;
+  color: white;
+  background: #4c70d8;
+  border-radius: 9px;
+  width: 33px;
+  height: 35px;
+  font-style: italic;
+}
+.brand-dot {
+  color: #7393d8;
+}
+.top-divider {
+  height: 28px;
+  width: 1px;
+  background: #e4e9f2;
+}
+.document-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  /* The name gives up width before the toolbar does: on a narrow window the
+     account control in the corner must stay reachable, and a canvas name is
+     readable truncated in a way a missing button is not. */
+  min-width: 60px;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+.document-title input {
+  font-weight: 600;
+  font-size: 14px;
+  width: 340px;
+  max-width: 30vw;
+}
+.document-icon {
+  font-size: 21px;
+  color: #8799b4;
+}
+/* The hint button sits right after the canvas name. Amber, because it is the
+   one control that costs something, and the price shows beside the bulb once
+   paid so it is never a surprise afterwards. */
+.hint-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  /* Room for the corner badge, which overhangs the button. */
+  margin-right: 10px;
+}
+.hint-button {
+  /* Square, with the price as a corner badge rather than inline text: the header
+     is tight, and inline text took eighty pixels from the canvas name. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #ecd9a6;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #a4700c;
+  cursor: pointer;
+}
+.hint-button:hover:not(:disabled) {
+  background: #fff3d6;
+  border-color: #dcbd6a;
+}
+.hint-button:focus-visible {
+  outline: 2px solid #c98f1a;
+  outline-offset: 2px;
+}
+.hint-button:disabled {
+  color: #b8bfcc;
+  border-color: #e4e9f2;
+  background: #f7f9fc;
+  cursor: default;
+}
+.hint-count {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  padding: 1px 4px;
+  border-radius: 8px;
+  background: #b27a12;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 13px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.hint-error {
+  color: #b54a3c;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.hint-notice {
+  /* Floats over the top of the canvas instead of taking a place in the header:
+     the header is already full, and a message competing there for width either
+     squeezes the canvas name or is squeezed to nothing itself. */
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  max-width: min(640px, 90vw);
+  color: #6c5410;
+  background: #fff7e2;
+  border: 1px solid #f0dfad;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(80, 60, 10, 0.12);
+  font-size: 12px;
+  padding: 7px 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+.report-hints {
+  color: #a4700c;
+}
+.local-badge {
+  color: #94a1b6;
+  border: 1px solid #e3e9f2;
+  border-radius: 20px;
+  font-size: 10px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+.top-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex: none;
+}
+.locale-switch {
+  display: flex;
+  gap: 9px;
+  font-size: 11px;
+}
+.export-actions {
+  display: flex;
+  border: 1px solid #dce5f2;
+  border-radius: 7px;
+}
+/* Not overflow: hidden, which would clip the Mermaid panel that hangs below
+   the group. The corners the clip used to round are rounded by hand instead. */
+.export-actions > button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+.export-actions > button:last-child,
+.export-actions > .mermaid-export:last-child button {
+  border-radius: 0 6px 6px 0;
+}
+.export-actions button {
+  padding: 9px 12px;
+  font-size: 11px;
+  border-right: 1px solid #e8edf5;
+}
+.export-actions button:last-child {
+  border: 0;
+}
+.export-actions button:hover {
+  background: #edf3ff;
+}
+.mermaid-export {
+  position: relative;
+  display: flex;
+}
+.mermaid-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #dce5f2;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(31, 54, 92, 0.14);
+  text-align: left;
+}
+.mermaid-hint {
+  margin: 0 0 10px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #7a8aa0;
+}
+.mermaid-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 7px 0;
+  font-size: 11px;
+  border-top: 1px solid #eef2f8;
+}
+.mermaid-item button {
+  padding: 4px 8px;
+  font-size: 10px;
+  border: 1px solid #dce5f2;
+  border-radius: 5px;
+}
+.mermaid-panel textarea {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 10px;
+}
+/* Three branches, each with its own blocks: one rectangle told a reader
+   nothing about what part of the system it was. */
+/* The handle a reader says out loud: quiet, monospaced, always in the same
+   corner so the eye can find it without reading the card. */
+/* A selected frame says so quietly: its handles are the loud part. */
+/* The cover React Flow lays over a boxed group: taken hold of anywhere, it
+   moves the group. It shows as a quiet tint, and a grabbing hand says so. */
+.react-flow__nodesselection-rect {
+  background: rgba(127, 154, 201, 0.08);
+  border: 1px dashed #7f9ac9;
+  cursor: grab;
+}
+
+/* The body is a backdrop: dragging across it pans the canvas as before. Only
+   the heading and the resize handles answer the pointer. */
+/* A frame's wrapper spans a whole diagram, and React Flow makes a draggable
+   node interactive: left alone it covers its neighbour's resize grips and every
+   block on the canvas beneath it. Nothing on a frame answers the pointer except
+   the parts that should -- its border strips, its header and its grips. */
+.react-flow__node:has(.diagram-frame) {
+  pointer-events: none !important;
+}
+.diagram-frame {
+  pointer-events: none;
+}
+.diagram-frame .frame-heading,
+.diagram-frame .react-flow__resize-control {
+  pointer-events: all;
+}
+.diagram-frame .frame-heading {
+  /* Above the border strips: they are drawn later in the box and would take
+     the press meant for the handle the frame is dragged by. */
+  position: relative;
+  z-index: 1;
+  cursor: grab;
+}
+/* Only a band along the border answers the pointer; the middle of a frame
+   belongs to the blocks drawn on it and to panning. */
+.frame-edge-hit {
+  position: absolute;
+  pointer-events: all;
+}
+/* The grips sit above the border strips: the strips are drawn later in the box
+   and would take the press meant for a resize. */
+.diagram-frame .react-flow__resize-control {
+  z-index: 2;
+}
+.frame-edge-top,
+.frame-edge-bottom {
+  left: 0;
+  right: 0;
+  height: 30px;
+}
+.frame-edge-top {
+  top: 0;
+}
+.frame-edge-bottom {
+  bottom: 0;
+}
+.frame-edge-left,
+.frame-edge-right {
+  top: 0;
+  bottom: 0;
+  width: 30px;
+}
+.frame-edge-left {
+  left: 0;
+}
+.frame-edge-right {
+  right: 0;
+}
+.diagram-frame .frame-heading:active {
+  cursor: grabbing;
+}
+.diagram-frame.is-selected {
+  border-color: #8aa4cf;
+}
+/* Four corners as squares and four sides as long bars: an edge is grabbed with
+   a sweep of the hand, a corner with a point. */
+.react-flow__resize-control.frame-bar {
+  border-width: 0;
+  background: #8aa4cf;
+  opacity: 0.55;
+  border-radius: 3px;
+}
+.react-flow__resize-control.frame-bar.top,
+.react-flow__resize-control.frame-bar.bottom {
+  height: 6px;
+  left: 22%;
+  right: 22%;
+  width: auto;
+}
+.react-flow__resize-control.frame-bar.left,
+.react-flow__resize-control.frame-bar.right {
+  width: 6px;
+  top: 22%;
+  bottom: 22%;
+  height: auto;
+}
+.react-flow__resize-control.frame-bar:hover {
+  opacity: 0.9;
+}
+.diagram-frame .react-flow__resize-control.handle,
+.object-card .react-flow__resize-control.handle {
+  /* Five pixels is a target a person misses; these are grabbed by hand. */
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+/* The leader's ends are anchors, not connection points: invisible, and the
+   pointer passes straight through them. */
+/* Ports: small, quiet, and only obvious when the block is under the pointer.
+   Ctrl and drag moves one; a plain drag starts a connection. */
+.block-port {
+  width: 9px;
+  height: 9px;
+  background: white;
+  border: 1.5px solid #93a8c8;
+}
+.block-port-out {
+  border-color: #6f8bb5;
+  background: #eef3fb;
+}
+.object-card:hover .block-port {
+  border-color: #4d76b8;
+}
+.port-add {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  font-size: 11px;
+  line-height: 14px;
+  text-align: center;
+  color: #6f8bb5;
+  background: white;
+  border: 1px solid #d3dfef;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.12s;
+  z-index: 5;
+}
+.port-add-left {
+  left: -22px;
+  top: 50%;
+}
+.port-add-right {
+  right: -22px;
+  top: 50%;
+}
+.port-add-top {
+  top: -22px;
+  left: 50%;
+  margin: 0 0 0 -8px;
+}
+.port-add-bottom {
+  top: auto;
+  bottom: -22px;
+  left: 50%;
+  margin: 0 0 0 -8px;
+}
+/* Turn the ports, write a note, remove the block: above the top-right corner,
+   in the order they are reached for. */
+/* A connection's own controls, under its label while it is selected: five ways
+   to draw it, and the way to be rid of it. */
+.edge-actions {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  gap: 3px;
+  margin-top: 5px;
+  padding: 3px;
+  background: white;
+  border: 1px solid #dce5f2;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(31, 54, 92, 0.12);
+}
+/* Under the label's own box, whatever size the author gave it. */
+.edge-label-hld .edge-actions,
+.edge-label .edge-text-actions {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0;
+  white-space: nowrap;
+}
+.edge-actions .port-add {
+  position: static;
+  margin: 0;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+}
+.port-add.is-on {
+  color: #2f4f86;
+  border-color: #93b4e4;
+  background: #eef3fb;
+}
+
+/* A hovered block rises above the connection layer. An edge carries an
+   invisible hit area twenty pixels wide, and it was swallowing clicks meant for
+   the buttons sitting on the block's own border. React Flow writes the depth
+   inline, so only !important can lift it -- and only a block is lifted: a
+   frame covers the whole diagram, and raising that would bury everything in
+   it. */
+.react-flow__node:has(.object-card):hover {
+  z-index: 10 !important;
+}
+.block-actions {
+  position: absolute;
+  top: -24px;
+  right: -4px;
+  display: flex;
+  gap: 4px;
+  z-index: 6;
+}
+.block-actions .port-add {
+  position: static;
+  margin: 0;
+  opacity: 0;
+}
+.object-card:hover .block-actions .port-add,
+.object-card.is-selected .block-actions .port-add {
+  opacity: 1;
+}
+.port-remove:hover {
+  color: #a4404a;
+  border-color: #efd3d6;
+  background: #fdf1f2;
+}
+.object-card:hover .port-add,
+.object-card.is-selected .port-add {
+  opacity: 1;
+}
+.port-add:hover {
+  color: #2f4f86;
+  border-color: #93b4e4;
+  background: #eef3fb;
+}
+.lead-handle {
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  min-height: 1px;
+  border: 0;
+}
+/* The card is tinted with its own leader colour, so a reader can match a line
+   to a note without following it. */
+.annotation-owner {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.card-short-name {
+  margin-left: auto;
+  padding: 1px 5px;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  color: #6b7a90;
+  background: #f1f4f9;
+  border-radius: 4px;
+}
+.palette-branch {
+  border: 1px solid #e6eaf2;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #fbfcfe;
+}
+.palette-branch summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  list-style: none;
+}
+.palette-branch summary::-webkit-details-marker {
+  display: none;
+}
+.palette-branch summary::before {
+  content: "▸";
+  font-size: 9px;
+  color: #9bacc4;
+}
+.palette-branch[open] summary::before {
+  content: "▾";
+}
+.palette-branch-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+.palette-branch summary small {
+  font-size: 10px;
+  color: #97a5b8;
+}
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 0 10px 10px;
+}
+.palette-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: 1px solid #e6eaf2;
+  border-radius: 7px;
+  background: white;
+}
+.palette-item:hover {
+  border-color: #c7d8f2;
+  background: #f2f7ff;
+}
+.palette-icon {
+  font-size: 16px;
+  line-height: 1;
+  color: #5b76a0;
+}
+.palette-name {
+  font-size: 9px;
+  line-height: 1.2;
+  text-align: center;
+  color: #6b7a90;
+}
+/* Publishing and deleting are not two halves of one control. */
+.canvas-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.action-divider {
+  width: 100%;
+  height: 0;
+  margin: 2px 0;
+  border: 0;
+  border-top: 1px solid #e6eaf2;
+}
+.action-button {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 11px;
+  text-align: left;
+  border: 1px solid #dce5f2;
+  border-radius: 7px;
+  background: #fbfcfe;
+}
+.action-button:hover {
+  background: #edf3ff;
+}
+.action-button.danger {
+  color: #a4404a;
+  border-color: #f0d7da;
+  background: #fdf8f8;
+}
+.action-button.danger:hover {
+  background: #fbeff0;
+}
+.workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.sidebar {
+  width: 330px;
+  flex: none;
+  background: white;
+  border-right: 1px solid #e3e9f2;
+  padding: 25px 20px;
+  overflow: auto;
+}
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #98a7be;
+}
+.sidebar h1 {
+  font-size: 21px;
+  letter-spacing: -0.5px;
+  margin: 9px 0;
+}
+.sidebar-intro p {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #95a3b9;
+  margin-bottom: 27px;
+}
+.sidebar-section {
+  margin-bottom: 23px;
+}
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  color: #a0adc1;
+}
+.section-heading h2 {
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin: 0 0 12px;
+  color: #8798b2;
+}
+.tool-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 8px;
+  border-radius: 8px;
+  margin: 3px 0;
+}
+.tool-button:hover {
+  background: #f3f6fd;
+}
+.tool-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 19px;
+}
+.blue {
+  color: #7495cf;
+  background: #edf3ff;
+}
+.violet {
+  color: #ab8ac6;
+  background: #f4effa;
+}
+.teal {
+  color: #70a69d;
+  background: #edf7f4;
+}
+.amber {
+  color: #c1a168;
+  background: #fff8eb;
+}
+.tool-button strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+.tool-button small {
+  display: block;
+  font-size: 10px;
+  color: #9ba9bd;
+  margin-top: 3px;
+}
+.tool-plus {
+  margin-left: auto;
+  color: #afbdd2;
+}
+.section-help {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #96a7bd;
+}
+.message-add {
+  display: flex;
+  gap: 5px;
+}
+.message-add button {
+  font-size: 10px;
+  padding: 5px 6px;
+  border: 1px solid #e4eaf4;
+  border-radius: 5px;
+  color: #8195b2;
+}
+.message-list {
+  margin-top: 12px;
+  max-height: 150px;
+  overflow: auto;
+}
+.message-item {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  align-items: center;
+  min-height: 28px;
+  color: #8e9eb5;
+}
+.message-item > span:nth-child(2) {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.message-item > span:first-child {
+  color: #bac5d6;
+  font-size: 9px;
+}
+.notes-section {
+  border-top: 1px solid #e9eef5;
+  padding-top: 20px;
+}
+.note-editor {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.note-number {
+  font-size: 9px;
+  color: #b3a78c;
+}
+.note-summary {
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 0;
+  color: #99a7ba;
+}
+.prototype-notice {
+  display: flex;
+  gap: 9px;
+  border: 1px solid #e7edf6;
+  border-radius: 7px;
+  padding: 10px;
+  color: #a1aec3;
+  margin-top: 16px;
+}
+.prototype-notice p {
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 0;
+}
+.editor-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.canvas-toolbar {
+  height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background: white;
+  border-bottom: 1px solid #e5ebf4;
+  flex: none;
+}
+.canvas-title {
+  flex: none;
+}
+.active-tab {
+  font-size: 12px;
+  font-weight: 600;
+}
+/* The status line sits between the title and the counts, centred on the canvas
+   rather than on the text beside it, so it does not jump as it changes. */
+.canvas-status {
+  flex: 1;
+  min-width: 0;
+  margin: 0 24px;
+  text-align: center;
+  font-size: 10px;
+  color: #7a8aa0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.view-badge {
+  font-size: 9px;
+  color: #a0afc3;
+  margin-left: 18px;
+  padding: 5px 8px;
+  border: 1px solid #e8edf4;
+  border-radius: 5px;
+}
+.object-count {
+  font-size: 10px;
+  color: #9bacbf;
+  display: flex;
+  gap: 8px;
+}
+.canvas-shell {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: #f7f9fd;
+}
+.canvas-hint {
+  position: absolute;
+  bottom: 17px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #a6b3c7;
+  pointer-events: none;
+  white-space: nowrap;
+  background: #f7f9fddd;
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+.error-banner {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: #fff1eb;
+  color: #9b5541;
+}
+.diagram-frame {
+  height: 100%;
+  border: 1px solid #dce5f2;
+  border-radius: 12px;
+  background: #ffffff65;
+  pointer-events: none;
+}
+.frame-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: #8b9bb2;
+  font-size: 12px;
+}
+.frame-type {
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 5px 8px;
+  color: #7997c7;
+  background: #edf3fc;
+  border-radius: 4px;
+}
+.frame-er .frame-type {
+  background: #f4eef9;
+  color: #aa90bf;
+}
+.frame-sequence .frame-type {
+  background: #edf7f4;
+  color: #8bb4a9;
+}
+.object-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  /* Weight and colour come from the account panel, as custom properties set on
+     the root element. The defaults here are what a page renders with before any
+     preference is read -- and what the template view falls back to. */
+  border: var(--card-border-width, 1.5px) solid var(--card-border-hld, #a9c0e0);
+  border-radius: 9px;
+  padding: 13px 15px;
+  position: relative;
+  box-shadow: 0 3px 9px #314d7807;
+}
+/* A datastore is drawn as the cylinder everyone already reads as one, and a
+   queue as the same cylinder on its side. Near-rectangular on purpose: the text
+   inside still has to fit.
+   The shape alone is not the symbol -- the second ring is. The card's own edge
+   draws the near rim, and the arc below (or beside) it draws the far one, which
+   is what makes a reader see a cylinder rather than a rounded box. */
+.object-card.datastore {
+  border-radius: 50% / 13%;
+  /* Room for the rim: the text starts below it, never across it. */
+  padding-top: 34px;
+}
+.object-card.queue {
+  border-radius: 13% / 50%;
+  padding-left: 50px;
+}
+.object-card.datastore::before,
+.object-card.queue::before {
+  content: "";
+  position: absolute;
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.object-card.datastore::before {
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 30px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.object-card.queue::before {
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  width: 44px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+.object-card.actor {
+  border-radius: 22px;
+}
+.card-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.object-card.is-selected {
+  border-color: #7c9ddd;
+  box-shadow: 0 0 0 2px #dbe7fb;
+}
+/* Several instances of one component, drawn as two outlines behind the block.
+   The white layer under each outline is what keeps them reading as separate
+   cards rather than as one thick shadow. Declared after the selected rule so a
+   selected block does not lose its instances. */
+.object-card.is-scaled,
+.object-card.is-scaled.is-selected {
+  box-shadow:
+    6px 6px 0 -1px #fff,
+    6px 6px 0 0 #c3d3ea,
+    12px 12px 0 -1px #fff,
+    12px 12px 0 0 #c3d3ea;
+}
+.er-card {
+  border-color: var(--card-border-er, #c4addf);
+}
+.sequence-card {
+  border-color: var(--card-border-sequence, #9fcdbd);
+}
+.card-kicker {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 8px;
+  letter-spacing: 0.7px;
+  color: #97accd;
+  margin-bottom: 8px;
+  height: 15px;
+}
+.card-icon {
+  font-size: 17px;
+}
+.drag-grip {
+  margin-left: auto;
+  font-size: 15px;
+  color: #becbe0;
+}
+.text-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  outline: none;
+  padding: 2px 3px;
+  line-height: 1.45;
+  resize: none;
+}
+.text-field:focus {
+  background: #f1f5ff;
+  border-color: #9db6e7;
+}
+.text-field[aria-invalid="true"] {
+  border-color: #cf7e6b;
+}
+/* The block's own text: it fills what the block has left, wraps long words and
+   keeps the line breaks the author typed. Ctrl+Enter commits it, as the input
+   rules require of a multi-line field. */
+textarea.card-title {
+  flex: 1 1 auto;
+  min-height: 2.4em;
+  width: calc(100% + 6px);
+  margin-left: -3px;
+  padding: 0;
+  resize: none;
+  border: 0;
+  background: transparent;
+  font-size: calc(15px * var(--text-scale, 1));
+  font-family: var(--text-family, inherit);
+  font-weight: 650;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+  /* A block's text is centred: the block is a shape, and its name and
+     description read as the shape's caption rather than as a left-set column.
+     An entity's fields stay left-set, because they are a table. */
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-y: auto;
+}
+textarea.card-title:focus {
+  outline: 1px solid #b9cdea;
+  border-radius: 4px;
+}
+/* An HLD block reads in fifths: the kicker on top, the name across the middle
+   three, the description in the bottom fifth with its gaps. The card's vertical
+   padding moves onto the zones, so a fifth is a fifth of the block and not of
+   what the padding leaves. A datastore keeps the room its rim needs. */
+.object-card.hld-card {
+  padding-bottom: 0;
+}
+.object-card.hld-card:not(.datastore) {
+  padding-top: 0;
+}
+.object-card.hld-card > .card-kicker {
+  flex: 0 0 20%;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 0;
+  margin-bottom: 0;
+  padding-top: 5px;
+  align-items: flex-start;
+}
+.object-card.hld-card > textarea.card-title {
+  flex: 1 1 0;
+  min-height: 0;
+}
+textarea.card-description {
+  flex: 0 0 20%;
+  box-sizing: border-box;
+  min-height: 0;
+  width: calc(100% + 6px);
+  margin: 0 0 0 -3px;
+  padding: 3px 3px 6px;
+  resize: none;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  font-family: var(--text-family, inherit);
+  color: #8d9bb1;
+  line-height: 1.3;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  /* A long description scrolls while it is edited and is simply cut at the
+     zone the rest of the time, so no scrollbar is left on the canvas. */
+  overflow: hidden;
+}
+textarea.card-description:focus {
+  overflow-y: auto;
+  outline: 1px solid #b9cdea;
+  border-radius: 4px;
+}
+.entity-fields {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid #eee8f5;
+}
+.entity-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  margin: 2px 0;
+}
+.primary-key {
+  color: #baa778;
+  font-size: 9px;
+}
+.field-marker {
+  color: #bec9da;
+}
+.entity-row .text-field {
+  padding: 0 2px;
+}
+.entity-row .field-type {
+  width: 65px;
+  flex: none;
+  color: #b1a1c5;
+  font-size: 10px;
+}
+/* A note about a block, not a louder block: the border is barely there, and
+   the only strong stroke is the left edge, tinted with the leader's colour so
+   the note and its line can be matched at a glance. */
+/* A note or an annotation is transparent: it sits among blocks and lines and
+   must not hide them. Its dashed outline still says where it is, and a white
+   halo keeps its text readable over whatever runs behind it. */
+.annotation-card {
+  height: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px dashed #ece5d5;
+  border-left: 3px solid transparent;
+  border-radius: 7px;
+}
+.annotation-grip {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 11px;
+  color: #c1a77a;
+  margin-bottom: 4px;
+}
+.annotation-grip > span:first-child {
+  font-size: 7px;
+  letter-spacing: 0.7px;
+}
+.annotation-grip > span:last-child {
+  margin-left: auto;
+}
+.annotation-card textarea {
+  font-size: calc(11px * var(--text-scale, 1));
+  font-family: var(--text-family, inherit);
+  text-shadow:
+    0 0 2px #fff,
+    0 0 3px #fff,
+    0 0 4px #fff;
+  color: #a8997b;
+  height: calc(100% - 20px);
+  line-height: 1.5;
+  padding: 0;
+}
+.annotation-card textarea:focus {
+  background: rgba(255, 253, 248, 0.85);
+  border-color: #dfcda8;
+}
+.lifeline {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  border-left: 1px dashed #becde0;
+  pointer-events: none;
+}
+.react-flow__handle {
+  background: #9bb2d7;
+  border: 2px solid white;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  min-height: 8px;
+}
+.react-flow__handle:hover {
+  background: #688bd1;
+  box-shadow: 0 0 0 4px #7fa0d233;
+}
+/* The label layer sits above the lines. Every connection carries an invisible
+   hit area twenty pixels wide, and a neighbouring line was swallowing clicks
+   meant for a label and for the controls under it. */
+.react-flow__edgelabel-renderer {
+  z-index: 5;
+}
+/* Transparent, so a label never hides the line beside it or a neighbouring
+   block. A white halo round the letters keeps the text readable where it
+   crosses its own line, and covers nothing but the letters themselves. */
+.edge-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-radius: 4px;
+  pointer-events: all;
+  color: #8a9fbb;
+  font-size: 10px;
+  padding: 2px 5px;
+  min-width: 75px;
+  max-width: 240px;
+}
+.edge-label input {
+  font-size: calc(10px * var(--text-scale, 1));
+  font-family: var(--text-family, inherit);
+  text-align: center;
+  padding: 0;
+  min-width: 80px;
+}
+/* A connection's name is a block of text, not a one-line field: it wraps at
+   forty characters and Enter starts a new line, so a long name is read whole
+   instead of being cut off after two dozen characters. */
+.edge-label textarea.text-field {
+  width: auto;
+  min-width: 0;
+  font-size: calc(10px * var(--text-scale, 1));
+  font-family: var(--text-family, inherit);
+  line-height: 1.4;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 3px #fff,
+    0 0 4px #fff;
+  text-align: center;
+  padding: 0 2px;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+/* An HLD label hangs off a zero-size point on the canvas, so the box can take
+   any size while its centre stays where the placement put it. */
+.edge-label-anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.edge-label-hld {
+  transform: translate(-50%, -50%);
+  justify-content: center;
+  max-width: 260px;
+}
+.edge-label-hld.is-sized {
+  max-width: none;
+  align-items: stretch;
+}
+.edge-label-hld.is-sized textarea.text-field {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+/* Scrollbars only while the text is being edited: a sized label with more text
+   than room used to keep its scrollbars on the canvas after it was left. */
+.edge-label-hld.is-sized textarea.text-field:focus {
+  overflow: auto;
+}
+.edge-label textarea.text-field:focus {
+  background: rgba(241, 245, 255, 0.85);
+}
+/* While the connection is selected the label shows its outline, the place to
+   grab it by, and the corner to size it from. */
+.edge-label-hld.is-editable {
+  outline: 1px dashed #7c9ddd;
+  outline-offset: 2px;
+}
+/* The grip sits just left of the label, level with its middle: above the label
+   it was too far from the text it moves. */
+.edge-label-grip {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  line-height: 15px;
+  text-align: center;
+  font-size: 11px;
+  color: #4d76b8;
+  background: #fff;
+  border: 1px solid #93b4e4;
+  border-radius: 4px;
+  cursor: move;
+  pointer-events: all;
+  touch-action: none;
+  user-select: none;
+}
+.edge-label-resize {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  border: 1px solid #4d76b8;
+  border-radius: 2px;
+  cursor: nwse-resize;
+  pointer-events: all;
+  touch-action: none;
+}
+.sequence-message {
+  background: white;
+  border: 1px solid #e1e9f4;
+  padding: 4px 6px;
+  border-radius: 5px;
+  gap: 5px;
+}
+.message-order {
+  color: #a5b6ce;
+  font-size: 8px;
+}
+.message-kind {
+  color: #88a3c2;
+  font-size: 13px;
+}
+.react-flow__controls {
+  box-shadow: none !important;
+  border: 1px solid #e0e8f4;
+  border-radius: 7px;
+  overflow: hidden;
+  margin: 17px !important;
+}
+.react-flow__controls-button {
+  border-color: #e8eef7 !important;
+  color: #8ca2c3;
+  fill: currentColor !important;
+}
+.react-flow__minimap {
+  width: 125px !important;
+  height: 80px !important;
+  border: 1px solid #dfe8f3;
+  border-radius: 7px;
+  overflow: hidden;
+  margin: 17px !important;
+}
+@media (max-width: 1050px) {
+  .local-badge,
+  .account-login,
+  .view-badge {
+    display: none;
+  }
+  /* A tight window spends its width on the tools, not on the space between
+     them, so the account control at the end stays on screen. */
+  .top-actions {
+    gap: 12px;
+  }
+  .sidebar {
+    width: 220px;
+    padding: 20px 14px;
+  }
+  .topbar {
+    padding: 0 18px;
+    gap: 15px;
+  }
+  .canvas-status {
+    margin: 0 12px;
+    font-size: 9px;
+  }
+}
+
+.react-flow__viewport {
+  will-change: transform;
+}
+.object-card {
+  contain: layout style;
+}
+
+/* Sign-in and the connected shell */
+.boot {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  color: #4b5d58;
+  font-size: 14px;
+}
+.boot-error {
+  color: #9a3b32;
+  padding: 24px;
+  text-align: center;
+}
+.signin {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+.signin-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 320px;
+  padding: 28px;
+  border: 1px solid #dfe5ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(37, 62, 53, 0.08);
+}
+.signin-card h1 {
+  margin: 0;
+  font-size: 20px;
+}
+.signin-card p {
+  margin: 0;
+  color: #63716e;
+  font-size: 12px;
+}
+.signin-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #4b5d58;
+}
+.signin-card input {
+  padding: 8px 10px;
+  border: 1px solid #d3dae5;
+  border-radius: 8px;
+  font: inherit;
+}
+.signin-card button {
+  padding: 9px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #297a6a;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.signin-card button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.signin-switch {
+  background: transparent !important;
+  color: #297a6a !important;
+  border-color: transparent !important;
+}
+.signin-error {
+  color: #9a3b32 !important;
+}
+.signin-hint {
+  font-size: 11px;
+}
+.save-status {
+  font-size: 11px;
+  color: #63716e;
+  white-space: nowrap;
+}
+.save-status-error,
+.save-status-conflict,
+.save-status-auth_required,
+.save-status-invalid {
+  color: #9a3b32;
+}
+.save-status-saving,
+.save-status-unknown {
+  color: #297a6a;
+}
+.save-button {
+  padding: 6px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #fff;
+  color: #297a6a;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Canvas list and recovery */
+.solution-list {
+  padding: 14px 18px;
+  border-top: 1px solid #e6eaf2;
+  border-bottom: 1px solid #e6eaf2;
+}
+.solution-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.solution-capacity {
+  font-size: 11px;
+  color: #8592a6;
+}
+.solution-list ul {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 570px;
+  overflow-y: auto;
+}
+.solution-list li button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.solution-list li button:hover {
+  background: #f2f5fa;
+}
+.solution-list li button.current {
+  border-color: #297a6a;
+  background: #eef6f4;
+}
+.solution-list li strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.solution-list li small {
+  font-size: 10px;
+  color: #8592a6;
+}
+.solution-create {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px dashed #b9c4d4;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.solution-create:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.solution-list-error {
+  margin: 0 0 6px;
+  font-size: 11px;
+  color: #9a3b32;
+}
+.recovery {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(24, 38, 34, 0.45);
+  z-index: 40;
+}
+.recovery-card {
+  width: min(520px, 92vw);
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(24, 38, 34, 0.25);
+}
+.recovery-card h2 {
+  margin: 6px 0 10px;
+  font-size: 17px;
+}
+.recovery-card p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #4b5d58;
+}
+.recovery-error {
+  color: #9a3b32 !important;
+}
+.recovery-note {
+  font-size: 11px !important;
+  color: #8592a6 !important;
+}
+.recovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 10px;
+}
+.recovery-actions button {
+  padding: 8px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #fff;
+  color: #297a6a;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.recovery-actions button:first-child {
+  background: #297a6a;
+  color: #fff;
+}
+.recovery-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border: 1px solid #dfc98a;
+  border-radius: 999px;
+  background: #fff9e8;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 30;
+}
+
+/* Catalog picker */
+.picker {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(24, 38, 34, 0.45);
+  z-index: 45;
+}
+.picker-card {
+  width: min(620px, 94vw);
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(24, 38, 34, 0.25);
+}
+.picker-card h2 {
+  margin: 6px 0 14px;
+  font-size: 18px;
+}
+.picker-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.picker-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: #63716e;
+}
+.picker-filters select {
+  padding: 6px 8px;
+  border: 1px solid #d3dae5;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+}
+.picker-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 340px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.picker-list button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #e6eaf2;
+  border-radius: 9px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.picker-list button.current {
+  border-color: #297a6a;
+  background: #eef6f4;
+}
+.picker-list strong {
+  font-size: 13px;
+}
+.picker-list small {
+  font-size: 11px;
+  color: #8592a6;
+}
+.picker-loading {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #8592a6;
+  text-align: center;
+}
+.picker-empty {
+  padding: 12px;
+  font-size: 12px;
+  color: #8592a6;
+}
+.picker-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #e6eaf2;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.picker-levels label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.picker-stars {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #b47a28;
+}
+.picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.picker-actions button {
+  padding: 8px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #fff;
+  color: #297a6a;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.picker-actions button:first-child {
+  background: #297a6a;
+  color: #fff;
+}
+.picker-actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.picker-error {
+  color: #9a3b32;
+  font-size: 12px;
+}
+
+/* The statement of the selected card, and the same list inside the reading view. */
+.picker-statement {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e6eaf2;
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+.statement-block ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.statement-block li {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #3d4a48;
+}
+
+/* The statement of the open canvas, shown in the sidebar while it is drawn. */
+.statement-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.statement-list li {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #3d4a48;
+  padding-left: 10px;
+  border-left: 2px solid #cfdad7;
+}
+.statement-figures li {
+  color: #6d7b78;
+  border-left-color: #e2e8e6;
+}
+
+/* Reading someone else's finished entry: full width, and nothing to press. */
+.preview {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f4f6fa;
+  z-index: 60;
+}
+.preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e6eaf2;
+  background: #fff;
+}
+.preview-bar h2 {
+  margin: 2px 0 0;
+  font-size: 16px;
+}
+/* The title takes the room, so every control sits together on the right. */
+.preview-bar > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.preview-bar button {
+  padding: 7px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #fff;
+  color: #297a6a;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.preview-stars {
+  font-size: 13px;
+  color: #b47a28;
+}
+.preview-bar .preview-edit {
+  background: #297a6a;
+  border-color: #297a6a;
+  color: #fff;
+}
+.preview-bar .preview-edit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.preview-saved {
+  font-size: 12px;
+  color: #297a6a;
+}
+/* Naming a copy: a strip under the bar, so the drawing below stays visible
+   while the editor decides what the new template is called. */
+.preview-copy {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e6eaf2;
+  background: #fff;
+}
+.preview-copy label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #55617a;
+}
+.preview-copy input {
+  width: 320px;
+  max-width: 50vw;
+  padding: 7px 10px;
+  border: 1px solid #c9d2e2;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+}
+.preview-copy button {
+  padding: 7px 12px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #fff;
+  color: #297a6a;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.preview-copy button:first-of-type {
+  background: #297a6a;
+  color: #fff;
+}
+.preview-copy button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.preview-hint {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #7a869f;
+}
+.preview-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.preview-statement {
+  width: 300px;
+  flex: none;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-right: 1px solid #e6eaf2;
+  background: #fff;
+}
+.preview-canvas {
+  flex: 1;
+  min-width: 0;
+  /* The canvas sizes itself from a flex parent; as a block child it would
+     collapse to no height and React Flow would fit an empty box. */
+  display: flex;
+}
+.preview-canvas .canvas-hint {
+  display: none;
+}
+/* A port in a reading view is an anchor for its line, not a control. */
+.block-port.is-quiet {
+  opacity: 0;
+  pointer-events: none;
+}
+/* A read-only card keeps its shape but loses the grips that promise editing. */
+.preview .drag-grip,
+.preview .annotation-grip span:last-child {
+  visibility: hidden;
+}
+.preview .text-field {
+  cursor: default;
+}
+
+/* The account lives in the corner: the login, and one button that opens
+   everything to do with this account. The toolbar keeps the drawing tools. */
+.account-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 6px;
+}
+.account-login {
+  font-size: 12px;
+  color: #55617a;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.top-actions .account-button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d3dae5;
+  border-radius: 50%;
+  background: #fff;
+  color: #35405a;
+  font-size: 14px;
+  cursor: pointer;
+}
+.top-actions .account-button:hover {
+  border-color: #297a6a;
+  color: #297a6a;
+}
+.account-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: flex-end;
+  background: #1c243617;
+}
+.account-panel {
+  width: 380px;
+  max-width: 100vw;
+  height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-left: 1px solid #e6eaf2;
+  padding: 16px 18px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: -8px 0 24px #23334d14;
+}
+.account-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.account-head h2 {
+  margin: 2px 0 0;
+  font-size: 17px;
+  word-break: break-all;
+}
+.account-head button {
+  padding: 6px 11px;
+  border: 1px solid #d3dae5;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.account-section label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #55617a;
+}
+.account-section input {
+  padding: 7px 10px;
+  border: 1px solid #c9d2e2;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+}
+.account-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.account-choices button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid #d3dae5;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  color: #35405a;
+  cursor: pointer;
+}
+.account-choices button.is-chosen {
+  border-color: #297a6a;
+  color: #297a6a;
+  background: #f2f8f6;
+}
+.account-choices button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+/* Each option shows what it does: a piece of outline, a piece of line. */
+.border-sample {
+  width: 20px;
+  height: 12px;
+  border-style: solid;
+  border-radius: 3px;
+}
+.edge-sample {
+  width: 24px;
+  border-radius: 2px;
+}
+.account-primary {
+  align-self: flex-start;
+  padding: 8px 13px;
+  border: 1px solid #297a6a;
+  border-radius: 8px;
+  background: #297a6a;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.account-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.account-note {
+  margin: 0;
+  font-size: 11px;
+  color: #7a869f;
+}
+.account-problem {
+  margin: 0;
+  font-size: 12px;
+  color: #b4553f;
+}
+.account-done {
+  margin: 0;
+  font-size: 12px;
+  color: #297a6a;
+}
+.account-exit {
+  margin-top: auto;
+  border-top: 1px solid #eef1f7;
+  padding-top: 14px;
+}
+.account-signout {
+  align-self: flex-start;
+  padding: 8px 13px;
+  border: 1px solid #cf7e6b;
+  border-radius: 8px;
+  background: #fff;
+  color: #b4553f;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Emphasis set per object from its panel. A block title is already semibold, so
+   "bold" goes further than that rather than matching it. */
+[data-text-emphasis="bold"] textarea.text-field,
+.edge-label[data-text-emphasis="bold"] input.text-field {
+  font-weight: 800;
+}
+[data-text-emphasis="italic"] textarea.text-field,
+.edge-label[data-text-emphasis="italic"] input.text-field {
+  font-style: italic;
+}
+/* The text controls carry two characters, so they are a pill, not a circle. */
+.block-actions .port-add.text-control,
+.edge-actions .port-add.text-control {
+  width: auto;
+  min-width: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+.edge-actions .port-add.text-control {
+  min-width: 20px;
+}
+.block-actions .port-add.text-control:disabled,
+.edge-actions .port-add.text-control:disabled {
+  color: #c3cddc;
+  cursor: default;
+}
+/* A note or an annotation shows its controls only while selected, so they are
+   simply visible when they are there. */
+.annotation-card {
+  position: relative;
+}
+.annotation-actions .port-add {
+  opacity: 1;
+}
+
+/* The task on the canvas: three panels in a column left of the diagrams. They
+   read as a brief pinned beside the drawing -- a quiet card, a clear title, the
+   items as a list -- and scroll inside when an author makes one smaller. */
+.context-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fbfcfe;
+  border: 1px solid #d6dfec;
+  border-left: 3px solid #8aa4cf;
+  border-radius: 8px;
+  box-shadow: 0 3px 9px #314d7807;
+  overflow: hidden;
+}
+.context-panel.is-selected {
+  border-color: #7c9ddd;
+  box-shadow: 0 0 0 2px #dbe7fb;
+}
+.context-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px 6px;
+  cursor: grab;
+}
+.context-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #33445e;
+}
+.context-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 10px 8px 12px;
+}
+.context-group + .context-group {
+  margin-top: 8px;
+}
+.context-group-title {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a9bb6;
+  margin: 2px 0 4px;
+}
+.context-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.context-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 3px 0;
+  border-bottom: 1px dashed #e6ecf5;
+}
+.context-fields {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.context-panel textarea.text-field,
+.context-panel input.text-field {
+  width: 100%;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #3d4b63;
+  padding: 1px 3px;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+.context-panel textarea.text-field:focus {
+  overflow-y: auto;
+}
+.context-parameter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 64px 72px;
+  gap: 4px;
+  align-items: start;
+}
+.context-parameter input.context-value {
+  text-align: right;
+}
+.context-condition {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 4px;
+  align-items: start;
+  margin-top: 1px;
+}
+.context-condition > span {
+  font-size: 9px;
+  color: #8a9bb6;
+  padding-top: 3px;
+}
+.context-numeric {
+  margin: 2px 0 0;
+  font-size: 10px;
+  color: #6b7a90;
+}
+.context-remove {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: #b3bfd1;
+  font-size: 12px;
+  line-height: 14px;
+  cursor: pointer;
+}
+.context-item:hover .context-remove {
+  color: #a4404a;
+  border-color: #efd3d6;
+}
+.context-add {
+  margin-top: 4px;
+  padding: 2px 8px;
+  border: 1px dashed #c3d0e3;
+  border-radius: 6px;
+  background: transparent;
+  color: #4d76b8;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.context-add:disabled {
+  color: #b3bfd1;
+  cursor: default;
+}

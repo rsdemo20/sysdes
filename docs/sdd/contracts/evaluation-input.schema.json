@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sysdes.invalid/contracts/evaluation-input.schema.json",
+  "title": "evaluation-input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "inputSchemaVersion": {
+      "const": 1
+    },
+    "exportVersion": {
+      "const": 1
+    },
+    "canvasId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "documentRevision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "evaluationType": {
+      "enum": [
+        "solution",
+        "hld",
+        "er",
+        "sequence"
+      ]
+    },
+    "diagramIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+      },
+      "minItems": 0,
+      "maxItems": 2000,
+      "uniqueItems": true
+    },
+    "semanticExport": {
+      "$ref": "https://sysdes.invalid/contracts/semantic-export.schema.json"
+    },
+    "templateBaseline": {
+      "anyOf": [
+        {
+          "$ref": "https://sysdes.invalid/contracts/semantic-export.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "semanticDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "addedIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 0,
+          "maxItems": 2000,
+          "uniqueItems": true
+        },
+        "removedIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 0,
+          "maxItems": 2000,
+          "uniqueItems": true
+        },
+        "changedIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 0,
+          "maxItems": 2000,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "addedIds",
+        "removedIds",
+        "changedIds"
+      ]
+    },
+    "rubric": {
+      "$ref": "https://sysdes.invalid/contracts/rubric.schema.json"
+    },
+    "rubricVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "promptVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "modelId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "modelParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "maxOutputTokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        }
+      },
+      "required": [
+        "temperature",
+        "maxOutputTokens"
+      ]
+    },
+    "providerPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requireParameters": {
+          "const": true
+        },
+        "allowFallbacks": {
+          "type": "boolean"
+        },
+        "allowedProviders": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "minItems": 0,
+          "maxItems": 30
+        }
+      },
+      "required": [
+        "requireParameters",
+        "allowFallbacks",
+        "allowedProviders"
+      ]
+    },
+    "reportLocale": {
+      "enum": [
+        "ru",
+        "en"
+      ]
+    },
+    "semanticContentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evaluationInputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadlineAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "inputSchemaVersion",
+    "exportVersion",
+    "canvasId",
+    "documentRevision",
+    "evaluationType",
+    "diagramIds",
+    "semanticExport",
+    "templateBaseline",
+    "semanticDelta",
+    "rubric",
+    "rubricVersion",
+    "promptVersion",
+    "modelId",
+    "modelParameters",
+    "providerPolicy",
+    "reportLocale",
+    "semanticContentHash",
+    "evaluationInputHash",
+    "createdAt",
+    "deadlineAt"
+  ]
+}

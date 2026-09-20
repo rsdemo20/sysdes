@@ -1,0 +1,1569 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sysdes.invalid/contracts/api-models.schema.json",
+  "title": "api-models",
+  "$defs": {
+    "Problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 400,
+          "maximum": 599
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 4000
+        },
+        "correlationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 500
+              },
+              "message": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 500
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "retryAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "title",
+        "status",
+        "code",
+        "detail",
+        "correlationId"
+      ]
+    },
+    "Credentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "login": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 32,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 12,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "login",
+        "password"
+      ]
+    },
+    "Login": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "login": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "login",
+        "password"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "login": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 32
+        },
+        "role": {
+          "type": "string",
+          "pattern": "^(user|admin)$"
+        }
+      },
+      "required": [
+        "id",
+        "login",
+        "role"
+      ]
+    },
+    "Session": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user": {
+          "$ref": "#/$defs/User"
+        },
+        "passwordChangeRequired": {
+          "type": "boolean"
+        },
+        "csrfToken": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "user",
+        "passwordChangeRequired",
+        "csrfToken"
+      ]
+    },
+    "PasswordChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "currentPassword": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "newPassword": {
+          "type": "string",
+          "minLength": 12,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "currentPassword",
+        "newPassword"
+      ]
+    },
+    "Selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "currentSolutionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selectionRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "currentSolutionId",
+        "selectionRevision"
+      ]
+    },
+    "SelectSolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "solutionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        }
+      },
+      "required": [
+        "solutionId"
+      ]
+    },
+    "Capacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "used": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "used",
+        "limit"
+      ]
+    },
+    "TemplateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "templateVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "templateId",
+        "templateVersion"
+      ]
+    },
+    "CreateSolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domainId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "templateVersionRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemplateRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "templateLocale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "domainId",
+        "templateVersionRef",
+        "name"
+      ]
+    },
+    "SaveSolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "document": {
+          "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+        }
+      },
+      "required": [
+        "name",
+        "document"
+      ]
+    },
+    "ConflictCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "document": {
+          "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+        }
+      },
+      "required": [
+        "name",
+        "document"
+      ]
+    },
+    "SolutionSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "domainId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "currentReportRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hintsUsed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000,
+          "description": "Hints taken on this canvas. Each takes five percentage points off the score of a later solution evaluation."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domainId",
+        "revision",
+        "createdAt",
+        "updatedAt",
+        "currentReportRef",
+        "hintsUsed"
+      ]
+    },
+    "Solution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "domainId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "currentReportRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hintsUsed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000,
+          "description": "Hints taken on this canvas. Each takes five percentage points off the score of a later solution evaluation."
+        },
+        "document": {
+          "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domainId",
+        "revision",
+        "createdAt",
+        "updatedAt",
+        "currentReportRef",
+        "hintsUsed",
+        "document"
+      ]
+    },
+    "SolutionsPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SolutionSummary"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "capacity": {
+          "$ref": "#/$defs/Capacity"
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor",
+        "capacity"
+      ]
+    },
+    "StartEvaluation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "evaluationType": {
+              "const": "solution"
+            },
+            "reportLocale": {
+              "enum": [
+                "ru",
+                "en"
+              ]
+            }
+          },
+          "required": [
+            "revision",
+            "evaluationType",
+            "reportLocale"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "evaluationType": {
+              "enum": [
+                "hld",
+                "er",
+                "sequence"
+              ]
+            },
+            "reportLocale": {
+              "enum": [
+                "ru",
+                "en"
+              ]
+            },
+            "diagramIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+              },
+              "minItems": 1,
+              "maxItems": 2000,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "revision",
+            "evaluationType",
+            "reportLocale",
+            "diagramIds"
+          ]
+        }
+      ]
+    },
+    "EvaluationAccepted": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running"
+          ]
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "evaluationId",
+        "state",
+        "deadlineAt"
+      ]
+    },
+    "EvaluationSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "solutionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "evaluationType": {
+          "enum": [
+            "solution",
+            "hld",
+            "er",
+            "sequence"
+          ]
+        },
+        "sourceRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reportLocale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "succeeded",
+            "failed",
+            "timeout",
+            "outcome_unknown"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resultAvailable": {
+          "type": "boolean"
+        },
+        "errorCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "evaluationId",
+        "solutionId",
+        "evaluationType",
+        "sourceRevision",
+        "reportLocale",
+        "state",
+        "createdAt",
+        "deadlineAt",
+        "finishedAt",
+        "resultAvailable",
+        "errorCode"
+      ]
+    },
+    "Evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "solutionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "evaluationType": {
+          "enum": [
+            "solution",
+            "hld",
+            "er",
+            "sequence"
+          ]
+        },
+        "sourceRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reportLocale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "succeeded",
+            "failed",
+            "timeout",
+            "outcome_unknown"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resultAvailable": {
+          "type": "boolean"
+        },
+        "stale": {
+          "type": "boolean",
+          "description": "True when the stored report describes different semantics than the canvas currently holds. Layout-only changes never set it. Always false when there is no stored result to be stale."
+        },
+        "errorCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "https://sysdes.invalid/contracts/evaluation-result-v2.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "evaluationId",
+        "solutionId",
+        "evaluationType",
+        "sourceRevision",
+        "reportLocale",
+        "state",
+        "createdAt",
+        "deadlineAt",
+        "finishedAt",
+        "resultAvailable",
+        "stale",
+        "errorCode",
+        "result"
+      ]
+    },
+    "EvaluationsPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EvaluationSummary"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ]
+    },
+    "Domains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "displayName"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 100
+    },
+    "Templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "templateVersion": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "domainId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "locale": {
+            "enum": [
+              "ru",
+              "en"
+            ]
+          }
+        },
+        "required": [
+          "templateId",
+          "templateVersion",
+          "domainId",
+          "title",
+          "locale"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 2000
+    },
+    "Template": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "templateVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "domainId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "locale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "rubricVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "document": {
+          "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+        }
+      },
+      "required": [
+        "templateId",
+        "templateVersion",
+        "domainId",
+        "title",
+        "locale",
+        "rubricVersion",
+        "document"
+      ]
+    },
+    "Health": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "ok"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "CatalogSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entryId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "entryVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "domainId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "locale": {
+          "enum": [
+            "ru",
+            "en"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "starter",
+            "user"
+          ]
+        },
+        "exportTag": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 40,
+              "pattern": "^[a-z0-9][a-z0-9_-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "difficultyReserve": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "allowedDisclosureLevels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "gradable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "entryId",
+        "entryVersion",
+        "domainId",
+        "title",
+        "locale",
+        "origin",
+        "exportTag",
+        "stars",
+        "difficultyReserve",
+        "allowedDisclosureLevels",
+        "gradable"
+      ]
+    },
+    "CatalogPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CatalogSummary"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ]
+    },
+    "CatalogEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "$ref": "#/$defs/CatalogSummary"
+        },
+        "disclosure": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "baseRequirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 1,
+          "maxItems": 50
+        },
+        "keyMetrics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "revealedDocument": {
+          "anyOf": [
+            {
+              "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "summary",
+        "disclosure",
+        "baseRequirements",
+        "keyMetrics",
+        "acceptanceCriteria",
+        "revealedDocument"
+      ]
+    },
+    "CatalogReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "$ref": "#/$defs/CatalogSummary"
+        },
+        "baseRequirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 1,
+          "maxItems": 50
+        },
+        "keyMetrics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "document": {
+          "$ref": "https://sysdes.invalid/contracts/canvas-document.schema.json"
+        }
+      },
+      "required": [
+        "summary",
+        "baseRequirements",
+        "keyMetrics",
+        "acceptanceCriteria",
+        "document"
+      ]
+    },
+    "ExportTag": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tag": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "isDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tag",
+        "isDefault"
+      ]
+    },
+    "SetExportTag": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tag": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        }
+      },
+      "required": [
+        "tag"
+      ]
+    },
+    "PublishToCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "exportTag": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 40,
+              "pattern": "^[a-z0-9][a-z0-9_-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allowedDisclosureLevels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "difficultyReserve": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        }
+      },
+      "required": [
+        "revision",
+        "exportTag",
+        "allowedDisclosureLevels",
+        "difficultyReserve"
+      ]
+    },
+    "ApproveRubric": {
+      "additionalProperties": false,
+      "description": "Weights for an entry already in the catalog.\n\n`baseVersion` names the version being approved, so an approval built on a\nstale read is answered with a conflict instead of quietly landing on top of\nsomebody else's.",
+      "properties": {
+        "baseVersion": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "rubric": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "baseVersion",
+        "rubric"
+      ],
+      "type": "object"
+    },
+    "NewCatalogVersion": {
+      "additionalProperties": false,
+      "description": "An edited template built on baseVersion. Only baseVersion is required: an omitted field keeps what the edited version had, while a field that is present and null is the editor stating that value.",
+      "properties": {
+        "baseVersion": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "titles": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "baseRequirements": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "keyMetrics": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "acceptanceCriteria": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "document": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "allowedDisclosureLevels": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array"
+        },
+        "difficultyReserve": {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "rubric": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "baseVersion"
+      ],
+      "type": "object"
+    },
+    "SavedTemplate": {
+      "additionalProperties": false,
+      "description": "A correction saved over the template itself. Every field is optional: an omitted one keeps what the template had. The weights are not among them, because a canvas pins the rubric version it was started under.",
+      "properties": {
+        "titles": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "baseRequirements": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "keyMetrics": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "acceptanceCriteria": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "document": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "allowedDisclosureLevels": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array"
+        },
+        "difficultyReserve": {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "published": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TemplateCopy": {
+      "additionalProperties": false,
+      "description": "An edit saved under a new name, which creates a template of its own at version 1 and leaves the one it came from alone. baseVersion is optional and, when given, refuses a copy made from a read that has been overtaken.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "baseVersion": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "titles": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "baseRequirements": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "keyMetrics": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "acceptanceCriteria": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "document": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "allowedDisclosureLevels": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array"
+        },
+        "difficultyReserve": {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "published": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "SetSolutionRubric": {
+      "additionalProperties": false,
+      "description": "Weights for one's own canvas. No template reference: it belongs to none.",
+      "properties": {
+        "rubric": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "rubric"
+      ],
+      "type": "object"
+    },
+    "HintTaken": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The next part of the template this canvas started from, opened at the price of five points of the score. Nothing is charged when nothing is left to open.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "hld",
+            "er",
+            "sequence",
+            "notes"
+          ]
+        },
+        "revealedCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hintsUsed": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "penaltyPercent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scoreExhausted": {
+          "type": "boolean"
+        },
+        "solution": {
+          "$ref": "#/$defs/Solution"
+        }
+      },
+      "required": [
+        "kind",
+        "revealedCount",
+        "hintsUsed",
+        "penaltyPercent",
+        "scoreExhausted",
+        "solution"
+      ]
+    }
+  }
+}

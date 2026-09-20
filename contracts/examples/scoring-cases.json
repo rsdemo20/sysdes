@@ -1,0 +1,68 @@
+[
+  {
+    "rawScore": 0,
+    "referenceScore": 1500,
+    "expectedPercent": 0.0,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 1,
+    "referenceScore": 1500,
+    "expectedPercent": 0.07,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 45,
+    "referenceScore": 1500,
+    "expectedPercent": 3.0,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 120,
+    "referenceScore": 1500,
+    "expectedPercent": 8.0,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 700,
+    "referenceScore": 1500,
+    "expectedPercent": 46.67,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 1200,
+    "referenceScore": 1500,
+    "expectedPercent": 80.0,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 1499,
+    "referenceScore": 1500,
+    "expectedPercent": 99.93,
+    "maximumReached": false
+  },
+  {
+    "rawScore": 1500,
+    "referenceScore": 1500,
+    "expectedPercent": 100,
+    "maximumReached": true
+  },
+  {
+    "rawScore": 1545,
+    "referenceScore": 1500,
+    "expectedPercent": 100,
+    "maximumReached": true
+  },
+  {
+    "rawScore": 1650,
+    "referenceScore": 1500,
+    "expectedPercent": 100,
+    "maximumReached": true
+  },
+  {
+    "rawScore": 2000,
+    "referenceScore": 1500,
+    "expectedPercent": 100,
+    "maximumReached": true
+  }
+]

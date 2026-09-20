@@ -1,0 +1,9 @@
+{
+  "domainId": "ecommerce",
+  "templateVersionRef": {
+    "templateId": "order-payment",
+    "templateVersion": 1
+  },
+  "templateLocale": "ru",
+  "name": null
+}

@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sysdes.invalid/contracts/rubric.schema.json",
+  "title": "rubric",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "rubricId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "domainId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "templateVersionRef": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "templateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            "templateVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "templateId",
+            "templateVersion"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "referenceScore": {
+      "const": 1500
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "part": {
+            "enum": [
+              "hld",
+              "additional"
+            ]
+          },
+          "maxPoints": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+          },
+          "exclusiveGroup": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ru": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 4000
+              },
+              "en": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 4000
+              }
+            },
+            "required": [
+              "ru",
+              "en"
+            ]
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ru": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 4000
+                },
+                "en": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 4000
+                }
+              },
+              "required": [
+                "ru",
+                "en"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 30
+          },
+          "levels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                },
+                "points": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000000
+                },
+                "description": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "ru": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 4000
+                    },
+                    "en": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 4000
+                    }
+                  },
+                  "required": [
+                    "ru",
+                    "en"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "points",
+                "description"
+              ]
+            },
+            "minItems": 2,
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "id",
+          "part",
+          "maxPoints",
+          "exclusiveGroup",
+          "description",
+          "alternatives",
+          "levels"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 200
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "rubricId",
+    "version",
+    "domainId",
+    "templateVersionRef",
+    "referenceScore",
+    "items"
+  ]
+}

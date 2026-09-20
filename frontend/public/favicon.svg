@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>sysdes</title>
+  <!-- The brand symbol from the header, on a square: the same blue, the same
+       rounded corner in proportion, the same white italic "s". -->
+  <rect x="0" y="0" width="64" height="64" rx="17" ry="17" fill="#4c70d8"/>
+  <!-- A lowercase letter sits below the middle of its em box, so the anchor is
+       raised and nudged left to put the letter itself in the middle. -->
+  <text x="31" y="23" fill="#ffffff" font-family="'Segoe UI', Arial, sans-serif"
+        font-size="56" font-weight="700" font-style="italic"
+        text-anchor="middle" dominant-baseline="central">s</text>
+</svg>

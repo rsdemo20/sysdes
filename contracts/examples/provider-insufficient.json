@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "status": "insufficient_data",
+  "summary": "Иллюстрация формата и арифметики; не экспертная оценка шаблона.",
+  "acceptanceCoverage": [
+    {
+      "criterionId": "accept-no-duplicate-order",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    },
+    {
+      "criterionId": "accept-payment-status",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    }
+  ],
+  "findings": [],
+  "questions": [],
+  "assumptions": [],
+  "evaluationType": "solution",
+  "items": [
+    {
+      "criterionId": "core",
+      "levelId": null,
+      "explanation": "Иллюстративный частичный зачёт.",
+      "evidenceRefs": []
+    },
+    {
+      "criterionId": "cache",
+      "levelId": null,
+      "explanation": "Рекомендация текстом без деталей.",
+      "evidenceRefs": []
+    },
+    {
+      "criterionId": "idempotency",
+      "levelId": null,
+      "explanation": "Иллюстрация начисления по ключу события.",
+      "evidenceRefs": []
+    }
+  ]
+}

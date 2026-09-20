@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sysdes:evaluation-result:1",
+  "title": "sysdes EvaluationResult v1 — draft",
+  "description": "Содержательный ответ AI. Привязка к evaluationId, revision и модели хранится сервером вне этого объекта. Разрешение ссылок и полнота acceptanceCoverage проверяются прикладным валидатором.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "overallScore", "summary", "criteria", "acceptanceCoverage", "findings", "questions", "assumptions"],
+  "properties": {
+    "status": {"type": "string", "enum": ["evaluated", "insufficient_data"]},
+    "overallScore": {"$ref": "#/$defs/score"},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 6000},
+    "criteria": {
+      "type": "array", "maxItems": 12,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "label", "score", "assessment", "evidenceRefs"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "label": {"type": "string", "minLength": 1, "maxLength": 200},
+          "score": {"$ref": "#/$defs/score"},
+          "assessment": {"type": "string", "minLength": 1, "maxLength": 2000},
+          "evidenceRefs": {"$ref": "#/$defs/refs"}
+        }
+      }
+    },
+    "acceptanceCoverage": {
+      "type": "array", "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["criterionId", "assessment", "explanation", "evidenceRefs"],
+        "properties": {
+          "criterionId": {"$ref": "#/$defs/id"},
+          "assessment": {
+            "type": "string",
+            "enum": ["supported_by_design", "at_risk", "not_addressed", "cannot_assess", "not_applicable_to_scope"]
+          },
+          "explanation": {"type": "string", "minLength": 1, "maxLength": 2000},
+          "evidenceRefs": {"$ref": "#/$defs/refs"}
+        }
+      }
+    },
+    "findings": {
+      "type": "array", "maxItems": 30,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "severity", "objectRefs", "requirementRefs", "acceptanceCriterionRefs", "score", "explanation", "recommendation"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "severity": {"type": "string", "enum": ["info", "minor", "major", "critical"]},
+          "objectRefs": {"$ref": "#/$defs/refs"},
+          "requirementRefs": {"$ref": "#/$defs/refs"},
+          "acceptanceCriterionRefs": {"$ref": "#/$defs/refs"},
+          "score": {"$ref": "#/$defs/score"},
+          "explanation": {"type": "string", "minLength": 1, "maxLength": 3000},
+          "recommendation": {"type": "string", "minLength": 1, "maxLength": 3000}
+        }
+      }
+    },
+    "questions": {"type": "array", "maxItems": 20, "items": {"type": "string", "minLength": 1, "maxLength": 1000}},
+    "assumptions": {"type": "array", "maxItems": 20, "items": {"type": "string", "minLength": 1, "maxLength": 1000}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "refs": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "score": {"type": ["integer", "null"], "minimum": 1, "maximum": 5}
+  }
+}

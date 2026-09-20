@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 2,
+  "status": "insufficient_data",
+  "summary": "Иллюстрация формата и арифметики; не экспертная оценка шаблона.",
+  "acceptanceCoverage": [
+    {
+      "criterionId": "accept-no-duplicate-order",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    },
+    {
+      "criterionId": "accept-payment-status",
+      "assessment": "cannot_assess",
+      "explanation": "Нужна проверка реализации.",
+      "evidenceRefs": []
+    }
+  ],
+  "findings": [],
+  "questions": [],
+  "assumptions": [],
+  "evaluationType": "solution",
+  "items": [
+    {
+      "criterionId": "core",
+      "levelId": null,
+      "explanation": "Иллюстративный частичный зачёт.",
+      "evidenceRefs": [],
+      "maxPoints": 1200,
+      "awardedPoints": null
+    },
+    {
+      "criterionId": "cache",
+      "levelId": null,
+      "explanation": "Рекомендация текстом без деталей.",
+      "evidenceRefs": [],
+      "maxPoints": 120,
+      "awardedPoints": null
+    },
+    {
+      "criterionId": "idempotency",
+      "levelId": null,
+      "explanation": "Иллюстрация начисления по ключу события.",
+      "evidenceRefs": [],
+      "maxPoints": 450,
+      "awardedPoints": null
+    }
+  ],
+  "evaluationId": "evaluation-example",
+  "sourceRevision": 1,
+  "reportLocale": "ru",
+  "createdAt": "2026-09-05T12:00:10Z",
+  "semanticContentHash": "23363cff0f05d94d5d190a220e7609af1082055b3426679f1f0cd8379fa160dc",
+  "evaluationInputHash": "b751539f2823a5f75594b267c28bb5ee7c6533fcee02902ab3be383ae0dc22e3",
+  "rubricVersion": "order-payment:1",
+  "rawScore": null,
+  "hldScore": null,
+  "additionalScore": null,
+  "referenceScore": 1500,
+  "progressPercent": null,
+  "maximumReached": false
+}

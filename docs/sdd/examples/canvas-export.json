@@ -1,0 +1,364 @@
+{
+  "exportSchemaVersion": 1,
+  "name": "solution-260905-001",
+  "domainId": "ecommerce",
+  "templateProvenance": {
+    "templateId": "order-payment",
+    "templateVersion": 1,
+    "templateLocale": "ru",
+    "rubricVersion": "order-payment:1"
+  },
+  "document": {
+    "schemaVersion": 1,
+    "semantic": {
+      "domainId": "ecommerce",
+      "templateProvenance": {
+        "templateId": "order-payment",
+        "templateVersion": 1,
+        "templateLocale": "ru",
+        "rubricVersion": "order-payment:1"
+      },
+      "context": {
+        "requirements": [
+          {
+            "id": "req-payment",
+            "kind": "functional",
+            "text": "После подтверждения оплаты обновить состояние существующего заказа и сохранить связь с платёжным событием.",
+            "priority": "must",
+            "diagramIds": [],
+            "originTemplateObjectId": "tpl-req-payment"
+          }
+        ],
+        "acceptanceCriteria": [
+          {
+            "id": "accept-no-duplicate-order",
+            "text": "Повтор одного уведомления об оплате не создаёт второй оплаченный заказ.",
+            "requirementRefs": [
+              "req-payment"
+            ],
+            "priority": "must",
+            "condition": {
+              "kind": "scenario",
+              "given": "Существует заказ и успешно обработанное уведомление с paymentEventId.",
+              "when": "То же уведомление приходит повторно.",
+              "then": "Состояние оплаты остаётся прежним, второй заказ и повторный эффект оплаты не создаются."
+            },
+            "verificationMethod": "Интеграционный тест с повторной и конкурентной доставкой одного paymentEventId.",
+            "diagramIds": [],
+            "originTemplateObjectId": "tpl-accept-no-duplicate-order"
+          },
+          {
+            "id": "accept-payment-status",
+            "text": "Не менее 99% принятых уведомлений обновляют статус заказа за 30 секунд в согласованных условиях приёмки.",
+            "requirementRefs": [
+              "req-payment"
+            ],
+            "priority": "must",
+            "condition": {
+              "kind": "numeric",
+              "metricName": "Доля уведомлений с обновлением статуса заказа за 30 секунд",
+              "comparator": "ge",
+              "value": 99,
+              "upperValue": null,
+              "unit": "%",
+              "measurementWindow": "Приёмочный прогон длительностью 1 час",
+              "population": "Все валидные уведомления, принятые HTTP endpoint в этом прогоне"
+            },
+            "verificationMethod": "Сопоставить время приёма события и перехода заказа в оплаченный статус; профиль нагрузки требуется уточнить.",
+            "diagramIds": [],
+            "originTemplateObjectId": "tpl-accept-payment-status"
+          }
+        ],
+        "technicalParameters": [],
+        "assumptions": [
+          {
+            "id": "assumption-delivery",
+            "text": "Платёжный провайдер может доставлять одно уведомление повторно.",
+            "diagramIds": []
+          }
+        ],
+        "constraints": []
+      },
+      "diagrams": [
+        {
+          "id": "diagram-hld",
+          "type": "hld",
+          "title": "Обработка оплаты",
+          "nodes": [
+            {
+              "id": "hld-orders",
+              "kind": "service",
+              "label": "Orders",
+              "properties": {
+                "responsibility": "Принимать уведомления и обновлять состояние заказов",
+                "technology": null
+              },
+              "originTemplateObjectId": "tpl-hld-orders"
+            },
+            {
+              "id": "hld-payment",
+              "kind": "external_system",
+              "label": "Payment provider",
+              "properties": {
+                "responsibility": "Подтверждать оплату",
+                "technology": null
+              },
+              "originTemplateObjectId": "tpl-hld-payment"
+            },
+            {
+              "id": "hld-store",
+              "kind": "datastore",
+              "label": "Orders DB",
+              "properties": {
+                "storageRole": "primary",
+                "technology": "PostgreSQL"
+              },
+              "originTemplateObjectId": "tpl-hld-store"
+            }
+          ],
+          "edges": [
+            {
+              "id": "hld-webhook",
+              "sourceId": "hld-payment",
+              "targetId": "hld-orders",
+              "label": "Уведомление об оплате",
+              "interaction": "async",
+              "protocol": "HTTPS webhook",
+              "originTemplateObjectId": "tpl-hld-webhook"
+            },
+            {
+              "id": "hld-write",
+              "sourceId": "hld-orders",
+              "targetId": "hld-store",
+              "label": "Обновить заказ",
+              "interaction": "sync",
+              "protocol": "SQL",
+              "originTemplateObjectId": "tpl-hld-write"
+            }
+          ]
+        },
+        {
+          "id": "diagram-er",
+          "type": "er",
+          "title": "Заказы и события оплаты",
+          "entities": [
+            {
+              "id": "entity-order",
+              "label": "Order",
+              "fields": [
+                {
+                  "id": "field-order-id",
+                  "name": "id",
+                  "dataType": "uuid",
+                  "nullable": false
+                },
+                {
+                  "id": "field-order-status",
+                  "name": "status",
+                  "dataType": "string",
+                  "nullable": false
+                }
+              ],
+              "primaryKeyFieldIds": [
+                "field-order-id"
+              ],
+              "uniqueConstraints": [],
+              "indexes": [],
+              "storageNotes": "Статусы и допустимые переходы требуют уточнения.",
+              "originTemplateObjectId": "tpl-entity-order"
+            },
+            {
+              "id": "entity-event",
+              "label": "PaymentEvent",
+              "fields": [
+                {
+                  "id": "field-event-id",
+                  "name": "event_id",
+                  "dataType": "string",
+                  "nullable": false
+                },
+                {
+                  "id": "field-event-order",
+                  "name": "order_id",
+                  "dataType": "uuid",
+                  "nullable": false
+                }
+              ],
+              "primaryKeyFieldIds": [
+                "field-event-id"
+              ],
+              "uniqueConstraints": [],
+              "indexes": [],
+              "storageNotes": "Ключ события уникален в пространстве одного платёжного провайдера.",
+              "originTemplateObjectId": null
+            }
+          ],
+          "relationships": [
+            {
+              "id": "er-event-order",
+              "sourceEntityId": "entity-event",
+              "targetEntityId": "entity-order",
+              "label": "Событие относится к заказу",
+              "sourceCardinality": "0..*",
+              "targetCardinality": "1",
+              "fieldMapping": [
+                {
+                  "sourceFieldId": "field-event-order",
+                  "targetFieldId": "field-order-id"
+                }
+              ],
+              "enforcement": "foreign_key",
+              "originTemplateObjectId": null
+            }
+          ]
+        },
+        {
+          "id": "diagram-sequence",
+          "type": "sequence",
+          "title": "Приём уведомления",
+          "participants": [
+            {
+              "id": "participant-payment",
+              "label": "Payment provider",
+              "role": "system",
+              "representedObjectId": "hld-payment",
+              "originTemplateObjectId": "tpl-participant-payment"
+            },
+            {
+              "id": "participant-orders",
+              "label": "Orders",
+              "role": "system",
+              "representedObjectId": "hld-orders",
+              "originTemplateObjectId": "tpl-participant-orders"
+            }
+          ],
+          "messages": [
+            {
+              "id": "message-webhook",
+              "sourceId": "participant-payment",
+              "targetId": "participant-orders",
+              "order": 1,
+              "kind": "sync",
+              "label": "POST /payment-events",
+              "replyToMessageId": null,
+              "originTemplateObjectId": "tpl-message-webhook"
+            },
+            {
+              "id": "message-response",
+              "sourceId": "participant-orders",
+              "targetId": "participant-payment",
+              "order": 2,
+              "kind": "return",
+              "label": "200 OK",
+              "replyToMessageId": "message-webhook",
+              "originTemplateObjectId": "tpl-message-response"
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "annotation-orders",
+          "ownerObjectId": "hld-orders",
+          "text": "Поведение после сбоя требует описания."
+        }
+      ],
+      "notes": [
+        {
+          "id": "note-sequence",
+          "text": "Обработка повторного события будет описана отдельным сценарием.",
+          "diagramIds": [
+            "diagram-sequence"
+          ]
+        },
+        {
+          "id": "note-cache",
+          "text": "Корзину можно кэшировать; TTL и инвалидация пока не описаны.",
+          "diagramIds": [
+            "diagram-hld"
+          ]
+        }
+      ],
+      "rubricVersion": "order-payment:1"
+    },
+    "layout": {
+      "objectPositions": {
+        "hld-orders": {
+          "x": 0,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "hld-payment": {
+          "x": 180,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "hld-store": {
+          "x": 360,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "entity-order": {
+          "x": 700,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "entity-event": {
+          "x": 880,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "participant-payment": {
+          "x": 1400,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        },
+        "participant-orders": {
+          "x": 1580,
+          "y": 100,
+          "width": 160,
+          "height": 80
+        }
+      },
+      "annotationOffsets": {
+        "annotation-orders": {
+          "dx": 0,
+          "dy": 90,
+          "width": 240,
+          "height": 60
+        }
+      },
+      "diagramFrames": {
+        "diagram-hld": {
+          "x": 0,
+          "y": 0,
+          "width": 650,
+          "height": 600
+        },
+        "diagram-er": {
+          "x": 700,
+          "y": 0,
+          "width": 650,
+          "height": 600
+        },
+        "diagram-sequence": {
+          "x": 1400,
+          "y": 0,
+          "width": 650,
+          "height": 600
+        }
+      },
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 1
+      }
+    }
+  }
+}
